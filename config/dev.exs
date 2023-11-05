@@ -1,7 +1,5 @@
 import Config
 
-config :seschedule,
+config :telegex,
   token: "123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11",
-  host: "localhost",
-  port: "4000",
-  max_concurrency: "1000"
+  webhook_url: "http://localhost/updates_hook"
