@@ -8,7 +8,7 @@ defmodule Seschedule.Periodically do
   Define job function to be called
   """
   @spec job() :: any()
-  def job, do: Seschedule.get()
+  def job, do: Seschedule.Request.get()
 
   def start_link(_opts) do
     GenServer.start_link(__MODULE__, %{})

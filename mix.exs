@@ -22,8 +22,12 @@ defmodule Seschedule.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:req, "~> 0.4.0"},
+      {:req, "~> 0.4.0"}, # TODO: remove in favor of tesla
+      {:telegram, github: "visciang/telegram", tag: "1.1.0"},
+      {:finch, "~> 0.16.0"},
+      {:bandit, "~> 1.0"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false}
     ]
   end
 end
