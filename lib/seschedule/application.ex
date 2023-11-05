@@ -21,7 +21,7 @@ defmodule Seschedule.Application do
       Seschedule.Periodically,
       {Finch, name: Seschedule.Telegram.Finch},
       {Telegram.Webhook,
-       config: webhook_config, bots: [{Seschedule.Telegram.Bot.Counter, bot_config}]}
+       config: webhook_config, bots: [{Seschedule.Telegram.Counter, bot_config}]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
