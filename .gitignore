@@ -26,3 +26,5 @@ seschedule-*.tar
 /tmp/
 
 .env
+
+secrets/

@@ -34,6 +34,9 @@ RUN mix local.hex --force && \
 
 # set build ENV
 ENV MIX_ENV="prod"
+ENV URL=https://seschedule.fly.dev
+# it will be used by mix later
+COPY secrets/telegram_token.txt /run/secrets/TELEGRAM_TOKEN
 
 # install mix dependencies
 COPY mix.exs mix.lock ./
@@ -44,7 +47,7 @@ RUN mkdir config
 # to ensure any relevant config change will trigger the dependencies
 # to be re-compiled.
 COPY config/config.exs config/${MIX_ENV}.exs config/
-RUN mix deps.compile
+RUN TELEGRAM_TOKEN="$(cat /run/secrets/TELEGRAM_TOKEN)" mix deps.compile
 
 # COPY priv priv
 
@@ -60,20 +63,20 @@ RUN mix deps.compile
 # Compile the release
 COPY lib lib
 
-RUN mix compile
+RUN TELEGRAM_TOKEN="$(cat /run/secrets/TELEGRAM_TOKEN)" mix compile
 
 # Changes to config/runtime.exs don't require recompiling the code
 COPY config/runtime.exs config/
 
 # COPY rel rel
-RUN mix release
+RUN TELEGRAM_TOKEN="$(cat /run/secrets/TELEGRAM_TOKEN)" mix release
 
 # start a new build stage so that the final image will only contain
 # the compiled release and other runtime necessities
 FROM ${RUNNER_IMAGE}
 
 RUN apt-get update -y && apt-get install -y libstdc++6 openssl libncurses5 locales \
-  && apt-get clean && rm -f /var/lib/apt/lists/*_*
+    && apt-get clean && rm -f /var/lib/apt/lists/*_*
 
 # Set the locale
 RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && locale-gen
@@ -94,9 +97,6 @@ COPY --from=builder --chown=nobody:root /app/_build/${MIX_ENV}/rel/seschedule ./
 USER nobody
 
 EXPOSE 4000
-
-ENV TELEGRAM_TOKEN=
-ENV URL=https://seschedule.fly.dev
 
 # If using an environment that doesn't automatically reap zombie processes, it is
 # advised to add an init process such as tini via `apt-get install`
