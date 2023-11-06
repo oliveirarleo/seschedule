@@ -9,7 +9,7 @@ defmodule Seschedule.Application do
   def start(_type, _args) do
     children = [
       Seschedule.Periodically,
-      Seschedule.HookHandler
+      # Seschedule.HookHandler
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

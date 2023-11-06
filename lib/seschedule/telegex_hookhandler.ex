@@ -6,7 +6,7 @@ defmodule Seschedule.HookHandler do
     # read some parameters from your env config
     env_config = Application.get_env(:seschedule, __MODULE__)
     # delete the webhook and set it again
-    # {:ok, true} = Telegex.delete_webhook()
+    {:ok, true} = Telegex.delete_webhook()
     # set the webhook (url is required)
     {:ok, true} = Telegex.set_webhook(env_config[:webhook_url])
     # specify port for web server
