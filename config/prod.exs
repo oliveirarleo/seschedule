@@ -1,19 +1,19 @@
 import Config
 
-if config_env() == :prod do
-  config :telegex,
-    token:
-      System.get_env("TELEGRAM_TOKEN") ||
-        raise("""
-        environment variable TELEGRAM_TOKEN is missing.
-        For example: 123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11
-        """)
+config :ex_gram, :webhook,
+  # array of strings
+  # allowed_updates: ["message", "poll"],
+  # string (file path)
+  # certificate: "priv/cert/selfsigned.pem",
+  # boolean
+  # drop_pending_updates: false,
+  # string
+  # ip_address: "1.1.1.1",
+  # integer
+  max_connections: 50,
+  # string
+  secret_token: "1114444123",
+  # string (only domain name)
+  url: "seschedule.fly.dev"
 
-  config :seschedule,
-    webhook_url:
-      System.get_env("URL") ||
-        raise("""
-        environment variable HOST is missing.
-        For example: https://seschedule.fly.dev/
-        """)
-end
+import_config "prod.secret.exs"

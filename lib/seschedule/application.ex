@@ -7,9 +7,13 @@ defmodule Seschedule.Application do
 
   @impl true
   def start(_type, _args) do
+    token = Application.fetch_env!(:ex_gram, :token)
+
     children = [
       Seschedule.Periodically,
-      # Seschedule.HookHandler
+      ExGram,
+      {Plug.Cowboy, scheme: :http, plug: Seschedule.Router, options: [port: 4000]},
+      {Seschedule.Bot, [method: :webhook, token: token]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

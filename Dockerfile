@@ -34,9 +34,6 @@ RUN mix local.hex --force && \
 
 # set build ENV
 ENV MIX_ENV="prod"
-ENV URL=https://seschedule.fly.dev
-# it will be used by mix later
-COPY secrets/telegram_token.txt /run/secrets/TELEGRAM_TOKEN
 
 # install mix dependencies
 COPY mix.exs mix.lock ./
@@ -46,8 +43,8 @@ RUN mkdir config
 # copy compile-time config files before we compile dependencies
 # to ensure any relevant config change will trigger the dependencies
 # to be re-compiled.
-COPY config/config.exs config/${MIX_ENV}.exs config/
-RUN TELEGRAM_TOKEN="$(cat /run/secrets/TELEGRAM_TOKEN)" mix deps.compile
+COPY config/config.exs config/${MIX_ENV}.exs config/${MIX_ENV}.secret.exs config/
+RUN mix deps.compile
 
 # COPY priv priv
 
@@ -63,13 +60,13 @@ RUN TELEGRAM_TOKEN="$(cat /run/secrets/TELEGRAM_TOKEN)" mix deps.compile
 # Compile the release
 COPY lib lib
 
-RUN TELEGRAM_TOKEN="$(cat /run/secrets/TELEGRAM_TOKEN)" mix compile
+RUN mix compile
 
 # Changes to config/runtime.exs don't require recompiling the code
 COPY config/runtime.exs config/
 
 # COPY rel rel
-RUN TELEGRAM_TOKEN="$(cat /run/secrets/TELEGRAM_TOKEN)" mix release
+RUN mix release
 
 # start a new build stage so that the final image will only contain
 # the compiled release and other runtime necessities

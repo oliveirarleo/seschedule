@@ -31,7 +31,4 @@ tmp
 
 **/.env
 
-# flyctl launch added from deps/telegex/priv/.gitignore
-# Waiting for development to be completed before publishing.
-deps/telegex/priv/bot_api_doc.*
 fly.toml
