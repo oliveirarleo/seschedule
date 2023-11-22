@@ -47,6 +47,6 @@ defmodule Seschedule.Request do
     atividade = atividade |> Enum.map(&Map.take(&1, relevant_props))
 
     # dbg(atividade)
-    atividade
+    {:ok, atividade}
   end
 end

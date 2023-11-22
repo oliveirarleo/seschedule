@@ -20,17 +20,17 @@ defmodule Seschedule.Periodically do
 
   def init(state) do
     job()
-    schedule()
+    send_scheduled()
     {:ok, state}
   end
 
   def handle_info(:work, state) do
     job()
-    schedule()
+    send_scheduled()
     {:noreply, state}
   end
 
-  defp schedule() do
+  defp send_scheduled() do
     period = Application.fetch_env!(:seschedule, :period)
     Process.send_after(self(), :work, period)
   end

@@ -8,7 +8,7 @@ defmodule Seschedule do
 
   ## Examples
 
-      iex> Seschedule.{:req, "~> 0.4.0"}()
+      iex> Seschedule.register_notify()
       :ok
 
   """
