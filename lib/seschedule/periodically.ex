@@ -9,8 +9,9 @@ defmodule Seschedule.Periodically do
   """
   @spec job() :: any()
   def job do
-    # dbg(Seschedule.Request.get())
-    dbg(ExGram.get_me())
+    dbg(Seschedule.Request.get())
+    dbg(Nadia.get_updates())
+    dbg(Nadia.get_me())
   end
 
   def start_link(_opts) do

@@ -22,14 +22,8 @@ defmodule Seschedule.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      # TODO: remove in favor of bandit?
       {:req, "~> 0.4.0"},
-      {:ex_gram, "~> 0.40.0"},
-      {:tesla, "~> 1.2"},
-      {:plug, "~> 1.15"},
-      {:plug_cowboy, "~> 2.0"},
-      {:hackney, "~> 1.12"},
-      {:jason, ">= 1.0.0"},
+      {:nadia, "~> 0.7.0"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false}
     ]

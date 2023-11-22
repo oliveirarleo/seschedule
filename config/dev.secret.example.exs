@@ -1,3 +1,3 @@
 import Config
 
-config :ex_gram, token: "1234"
+config :nadia, token: "1234"

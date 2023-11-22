@@ -28,8 +28,7 @@ defmodule Seschedule.Request do
 
     params = Keyword.merge(default_filter_params, filter_params)
 
-    %{"atividade" => atividade} =
-      Req.get!(base_url, params: params).body
+    %{"atividade" => atividade} = Req.get!(base_url, params: params).body
 
     relevant_props = [
       "id",

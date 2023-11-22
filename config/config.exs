@@ -5,6 +5,8 @@ config :seschedule,
   period: 5 * 60 * 1000,
   base_url: "https://www.sescsp.org.br/wp-json/wp/v1/atividades/filter"
 
+config :nadia, recv_timeout: 10
+
 config :logger, :console, metadata: [:bot, :chat_id]
 
 import_config "#{config_env()}.exs"
