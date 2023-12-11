@@ -1,9 +1,0 @@
-{
-    "recommendations": [
-        "jakebecker.elixir-ls",
-        "pantajoe.vscode-elixir-credo",
-        "phoenixframework.phoenix",
-        "ms-azuretools.vscode-docker",
-        "tamasfe.even-better-toml"
-    ]
-}
