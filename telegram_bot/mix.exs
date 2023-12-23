@@ -53,6 +53,7 @@ defmodule TelegramBot.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:telegex, "~> 1.3.2"},
       {:multipart, "~> 0.4.0"},
+      {:req, "~> 0.4.8"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false}
     ]

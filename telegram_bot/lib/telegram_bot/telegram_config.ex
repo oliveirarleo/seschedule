@@ -20,7 +20,7 @@ defmodule TelegramBot.TelegramConfig do
           command: "eventos",
           description: "Veja os últimos eventos do SESC"
         },
-        %Telegex.Type.BotCommand{command: "inscrever", description: "Se inscreva em um evento"}
+        %Telegex.Type.BotCommand{command: "lembrete", description: "Crie um lembrete para um evento"}
       ],
       language_code: "pt"
     )
@@ -28,7 +28,7 @@ defmodule TelegramBot.TelegramConfig do
     Telegex.set_my_commands(
       [
         %Telegex.Type.BotCommand{command: "events", description: "See all latests SESC events"},
-        %Telegex.Type.BotCommand{command: "subscribe", description: "Subscribe to an event"}
+        %Telegex.Type.BotCommand{command: "remind", description: "Remind me of an event"}
       ],
       language_code: "en"
     )

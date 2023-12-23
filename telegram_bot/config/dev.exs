@@ -19,8 +19,8 @@ config :telegram_bot, TelegramBotWeb.Endpoint,
   # http: [ip: {127, 0, 0, 1}, port: 4000],
   https: [
     port: 8443,
-    keyfile: "priv/keys/server.key",
-    certfile: "priv/keys/server.crt"
+    keyfile: "priv/keys/localhost.key",
+    certfile: "priv/keys/localhost.cert"
   ],
   check_origin: false,
   code_reloader: true,

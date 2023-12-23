@@ -1,4 +1,5 @@
 defmodule TelegramBotWeb.TelegramController do
+  alias TelegramBot.SESCAPI
   use TelegramBotWeb, :controller
 
   @spec update(Plug.Conn.t(), %{
@@ -6,44 +7,34 @@ defmodule TelegramBotWeb.TelegramController do
           message: Telegex.Type.MessageEntity.t(),
           update_id: Integer
         }) :: Plug.Conn.t()
-  def update(conn, %{"message" => command}) do
-    message = "Your message is " <> get_in(command, ["text"])
-    chat_id = get_in(command, ["chat", "id"])
-
-    Telegex.send_message(chat_id, "#{message} *bold text*
-    __underline__
-    ~strikethrough~
-    ||spoiler||
-    *bold _italic bold ~italic bold strikethrough ||italic bold strikethrough spoiler||~ __underline italic bold___ bold*
-    [inline URL](http://www.example.com/)
-    [inline mention of a user](tg://user?id=123456789)
-    ![👍](tg://emoji?id=5368324170671202286)
-    `inline fixed-width code`
-    ```
-    pre-formatted fixed-width code block
-    ```
-    ```python
-    pre-formatted fixed-width code block written in the Python programming language
-    ```",
+  def update(conn, %{"message" => %{"chat" => %{"id" => chat_id}}}) do
+    Telegex.send_message(
+      chat_id,
+      "Olá, quer dar uma olhada nos próximos eventos ou fazer uma pesquisa avançada?",
       parse_mode: "MarkdownV2",
       reply_markup: %Telegex.Type.InlineKeyboardMarkup{
         inline_keyboard: [
           [
             %Telegex.Type.InlineKeyboardButton{
-              text: "oi",
-              callback_data: "asdasdasd"
+              text: "Proximos eventos",
+              callback_data: "next_events"
+            }
+          ],
+          [
+            %Telegex.Type.InlineKeyboardButton{
+              text: "Estou com sorte",
+              callback_data: "random"
+            }
+          ],
+          [
+            %Telegex.Type.InlineKeyboardButton{
+              text: "Pesquisa avançada",
+              callback_data: "advanced_search"
             }
           ]
         ]
       }
     )
-
-    # %InlineKeyboardButton{
-    #   text: to_string(text),
-    #   callback_data: "verification:#{@data_vsn}:#{index}:#{verification_id}"
-    # }
-
-    # Telegex.set_chat_menu_button(chat_id)
 
     conn
     |> render(:update)
@@ -55,16 +46,390 @@ defmodule TelegramBotWeb.TelegramController do
           callback_query: Telegex.Type.CallbackQuery.t(),
           update_id: Integer
         }) :: Plug.Conn.t()
-  def update(conn, %{"callback_query" => callback_query}) do
-    id = get_in(callback_query, ["id"])
-    dbg(id)
-    Task.async(fn -> Telegex.answer_callback_query(id) end)
+  def update(conn, %{
+        "callback_query" => %{
+          "id" => message_id,
+          "data" => "next_events",
+          "message" => %{"chat" => %{"id" => chat_id}}
+        }
+      }) do
+    dbg("In next_events #{message_id}")
+    Task.async(fn -> Telegex.answer_callback_query(message_id) end)
 
-    chat_id = get_in(callback_query, ["message", "chat", "id"])
-    Telegex.send_message(chat_id, "Recebido")
+    # TODO: put as config
+    num_events = 5
+
+    {activities, %{"value" => total_events}} =
+      SESCAPI.get(ppp: num_events)
+
+    Telegex.send_message(
+      chat_id,
+      "Encontrei #{total_events} eventos, estes são os próximos #{num_events} eventos:"
+    )
+
+    send_activities_messages(chat_id, activities)
 
     conn
     |> render(:update)
     |> halt
+  end
+
+  @spec update(Plug.Conn.t(), %{
+          bot_token: String.t(),
+          callback_query: Telegex.Type.CallbackQuery.t(),
+          update_id: Integer
+        }) :: Plug.Conn.t()
+  def update(conn, %{
+        "callback_query" => %{
+          "id" => message_id,
+          "data" => "random",
+          "message" => %{"chat" => %{"id" => chat_id}}
+        }
+      }) do
+    dbg("In random #{message_id}")
+    Task.async(fn -> Telegex.answer_callback_query(message_id) end)
+
+    {activities, %{"value" => total_events}} = SESCAPI.get(ppp: 10000)
+
+    num_events = 5
+    activities = Enum.take_random(activities, num_events)
+
+    Telegex.send_message(
+      chat_id,
+      "De #{total_events} eventos no próximo mês, sorteei estes #{num_events} daqui para você:"
+    )
+
+    send_activities_messages(chat_id, activities)
+
+    conn
+    |> render(:update)
+    |> halt
+  end
+
+  @spec update(Plug.Conn.t(), %{
+          bot_token: String.t(),
+          callback_query: Telegex.Type.CallbackQuery.t(),
+          update_id: Integer
+        }) :: Plug.Conn.t()
+  def update(conn, %{
+        "callback_query" => %{
+          "id" => message_id,
+          "data" => "advanced_search",
+          "message" => %{"chat" => %{"id" => chat_id}}
+        }
+      }) do
+    dbg("In when #{message_id}")
+    Task.async(fn -> Telegex.answer_callback_query(message_id) end)
+
+    # TODO: use protobuf for callback_data
+    Telegex.send_message(
+      chat_id,
+      "Pra qual data você gostaria de buscar?",
+      parse_mode: "MarkdownV2",
+      reply_markup: %Telegex.Type.InlineKeyboardMarkup{
+        inline_keyboard: [
+          [
+            %Telegex.Type.InlineKeyboardButton{
+              text: "Proxima semana",
+              callback_data: "d:next_week"
+            }
+          ],
+          [
+            %Telegex.Type.InlineKeyboardButton{
+              text: "Proximo mês",
+              callback_data: "d:next_month"
+            }
+          ],
+          [
+            %Telegex.Type.InlineKeyboardButton{
+              text: "Proximos 3 meses",
+              callback_data: "d:next_three_months"
+            }
+          ]
+        ]
+      }
+    )
+
+    conn
+    |> render(:update)
+    |> halt
+  end
+
+  @spec update(Plug.Conn.t(), %{
+          bot_token: String.t(),
+          callback_query: Telegex.Type.CallbackQuery.t(),
+          update_id: Integer
+        }) :: Plug.Conn.t()
+  def update(conn, %{
+        "callback_query" => %{
+          "id" => message_id,
+          "data" => "d:" <> callback_data,
+          "message" => %{"chat" => %{"id" => chat_id}}
+        }
+      }) do
+    dbg("In where #{message_id}")
+    Task.async(fn -> Telegex.answer_callback_query(message_id) end)
+
+    # TODO: pagination
+    Telegex.send_message(
+      chat_id,
+      "Em qual unidade do SESC você gostaria de buscar?",
+      parse_mode: "MarkdownV2",
+      reply_markup: %Telegex.Type.InlineKeyboardMarkup{
+        inline_keyboard: get_places_inline_keyboard(callback_data)
+      }
+    )
+
+    conn
+    |> render(:update)
+    |> halt
+  end
+
+  @spec update(Plug.Conn.t(), %{
+          bot_token: String.t(),
+          callback_query: Telegex.Type.CallbackQuery.t(),
+          update_id: Integer
+        }) :: Plug.Conn.t()
+  def update(conn, %{
+        "callback_query" => %{
+          "id" => message_id,
+          "data" => "w:" <> callback_data,
+          "message" => %{"chat" => %{"id" => chat_id}}
+        }
+      }) do
+    dbg("In cat #{message_id}")
+    Task.async(fn -> Telegex.answer_callback_query(message_id) end)
+
+    ci = get_categories_inline_keyboard(callback_data)
+    dbg(ci)
+
+    Telegex.send_message(
+      chat_id,
+      "Qual categoria de eventos você gostaria de buscar?",
+      parse_mode: "MarkdownV2",
+      reply_markup: %Telegex.Type.InlineKeyboardMarkup{
+        inline_keyboard: get_categories_inline_keyboard(callback_data)
+      }
+    )
+
+    conn
+    |> render(:update)
+    |> halt
+  end
+
+  @spec update(Plug.Conn.t(), %{
+          bot_token: String.t(),
+          callback_query: Telegex.Type.CallbackQuery.t(),
+          update_id: Integer
+        }) :: Plug.Conn.t()
+  def update(conn, %{
+        "callback_query" => %{
+          "id" => message_id,
+          "data" => "p:" <> callback_data,
+          "message" => %{"chat" => %{"id" => chat_id}}
+        }
+      }) do
+    dbg("In final #{message_id}")
+
+    Task.async(fn -> Telegex.answer_callback_query(message_id) end)
+    Task.async(fn -> Telegex.send_chat_action(chat_id, "typing") end)
+
+    {page, category, where, when_} = category_where_when("p:" <> callback_data)
+
+    num_take_events = 7
+
+    {activities, %{"value" => total_events}} =
+      SESCAPI.get(
+        data_final: when_,
+        local: where,
+        categoria: category,
+        ppp: num_take_events,
+        page: page
+      )
+
+    case activities do
+      [] ->
+        Telegex.send_message(
+          chat_id,
+          "*Pesquisa*\n" <>
+            clean_text_for_markdown(
+              "Local: #{where}\nCategoria: #{category}\nAté #{when_}\nNão encontrei nenhum evento para essa pesquisa."
+            ),
+          parse_mode: "MarkdownV2"
+        )
+
+      events ->
+        Telegex.send_message(
+          chat_id,
+          "*Pesquisa*\n" <>
+            clean_text_for_markdown("""
+            Local: #{if where == "", do: "Todos", else: where}
+            Categoria: #{if category == "", do: "Todas", else: category}
+            Até #{when_}
+            Número de eventos encontrados #{total_events}#{if total_events > num_take_events do
+              ".\nAqui estão #{num_take_events} eventos da página #{page}"
+            end}:
+            """),
+          parse_mode: "MarkdownV2"
+        )
+
+        send_activities_messages(chat_id, events)
+
+        if total_events / page > num_take_events do
+          [_ | new_callback_params] = String.split(callback_data, "|")
+          new_callback_data = Enum.join(["p:#{page + 1}" | new_callback_params], "|")
+
+          Telegex.send_message(
+            chat_id,
+            "Para mais eventos, clique no botão abaixo:",
+            parse_mode: "MarkdownV2",
+            reply_markup: %Telegex.Type.InlineKeyboardMarkup{
+              inline_keyboard: [
+                [
+                  %Telegex.Type.InlineKeyboardButton{
+                    text: "Página #{page + 1}",
+                    callback_data: new_callback_data
+                  }
+                ]
+              ]
+            }
+          )
+        end
+    end
+
+    conn
+    |> render(:update)
+    |> halt
+  end
+
+  @spec update(Plug.Conn.t(), %{
+          bot_token: String.t(),
+          callback_query: Telegex.Type.CallbackQuery.t(),
+          update_id: Integer
+        }) :: Plug.Conn.t()
+  def update(conn, %{
+        "callback_query" => %{
+          "id" => message_id,
+          "data" => callback_data,
+          "message" => %{"chat" => %{"id" => chat_id}}
+        }
+      }) do
+    dbg("In fallback #{message_id}")
+    Task.async(fn -> Telegex.answer_callback_query(message_id) end)
+
+    Telegex.send_message(
+      chat_id,
+      "Busca em " <> callback_data,
+      parse_mode: "MarkdownV2"
+    )
+
+    conn
+    |> render(:update)
+    |> halt
+  end
+
+  @spec category_where_when(binary()) :: {binary(), binary(), binary()}
+  def category_where_when(callback_data) do
+    ["p:" <> page, "c:" <> category, "w:" <> where, "d:" <> when_] =
+      String.split(callback_data, "|")
+
+    where_for_api =
+      case where do
+        "all" -> ""
+        _ -> where
+      end
+
+    category_for_api =
+      case category do
+        "all" -> ""
+        other -> other
+      end
+
+    days_to_search =
+      case when_ do
+        "next_week" -> 7
+        "next_month" -> 30
+        "next_three_months" -> 90
+      end
+
+    when_for_api = Date.utc_today() |> Date.add(days_to_search) |> Date.to_string()
+
+    {page_for_api, _} = Integer.parse(page)
+    {page_for_api, category_for_api, where_for_api, when_for_api}
+  end
+
+  @spec send_activities_messages(integer(), list()) :: list()
+  def send_activities_messages(chat_id, activities) do
+    for %{
+          "titulo" => raw_title,
+          "complemento" => raw_description,
+          "imagem" => image_link,
+          "link" => link
+        } <- activities do
+      title = clean_text_for_markdown(raw_title)
+      description = clean_text_for_markdown(raw_description)
+
+      Telegex.send_photo(
+        chat_id,
+        image_link,
+        caption: "*[#{title}](https://www.sescsp.org.br#{link})*\n#{description}",
+        parse_mode: "MarkdownV2"
+      )
+    end
+  end
+
+  def clean_text_for_markdown(text) do
+    String.replace(
+      text,
+      [
+        "_",
+        "*",
+        "[",
+        "]",
+        "(",
+        ")",
+        "~",
+        "`",
+        ">",
+        "#",
+        "+",
+        "-",
+        "=",
+        "|",
+        "{",
+        "}",
+        ".",
+        "!"
+      ],
+      fn c -> "\\#{c}" end
+    )
+  end
+
+  def get_places_inline_keyboard(callback_data) do
+    # TODO: pagination
+    places = Application.fetch_env!(:telegram_bot, :places)
+
+    Keyword.keys(places)
+    |> Enum.map(fn places_id ->
+      %Telegex.Type.InlineKeyboardButton{
+        text: places[places_id],
+        callback_data: "w:#{places_id}|d:" <> callback_data
+      }
+    end)
+    |> Enum.chunk_every(3)
+  end
+
+  def get_categories_inline_keyboard(callback_data) do
+    # TODO: pagination
+    categories = Application.fetch_env!(:telegram_bot, :categories)
+
+    Keyword.keys(categories)
+    |> Enum.map(fn categories_id ->
+      %Telegex.Type.InlineKeyboardButton{
+        text: categories[categories_id],
+        callback_data: "p:1|c:#{categories_id}|w:#{callback_data}"
+      }
+    end)
+    |> Enum.chunk_every(3)
   end
 end
