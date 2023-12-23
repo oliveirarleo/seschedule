@@ -63,7 +63,6 @@ config :logger, :console,
 config :phoenix, :json_library, Jason
 
 config :telegram_bot,
-  webhook_url: "https://0dab-177-121-209-54.ngrok-free.app",
   sesc_api_url: "https://www.sescsp.org.br/wp-json/wp/v1/atividades/filter"
 
 # Import environment specific config. This must remain at the bottom
