@@ -93,7 +93,7 @@ COPY --from=builder --chown=nobody:root /app/_build/${MIX_ENV}/rel/seschedule ./
 
 USER nobody
 
-EXPOSE 4000
+EXPOSE 8443
 
 # If using an environment that doesn't automatically reap zombie processes, it is
 # advised to add an init process such as tini via `apt-get install`

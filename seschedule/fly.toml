@@ -1,4 +1,4 @@
-# fly.toml app configuration file generated for seschedule on 2023-12-23T16:56:58-03:00
+# fly.toml app configuration file generated for seschedule on 2023-12-24T14:18:55-03:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
@@ -10,8 +10,8 @@ kill_signal = "SIGTERM"
 [build]
 
 [env]
+  DATABASE_PATH = "/tmp/seschedule.db"
   PHX_HOST = "seschedule.fly.dev"
-  DATABASE_PATH="/tmp/seschedule.db"
   PORT = "8443"
 
 [http_service]
@@ -20,7 +20,6 @@ kill_signal = "SIGTERM"
   auto_stop_machines = true
   auto_start_machines = true
   min_machines_running = 0
-  max_machines_running = 1
   processes = ["app"]
   [http_service.concurrency]
     type = "connections"

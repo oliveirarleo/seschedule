@@ -376,12 +376,12 @@ defmodule SescheduleWeb.TelegramController do
           "message" => %{"chat" => %{"id" => chat_id}}
         }
       }) do
-    dbg("In fallback #{message_id}")
+    dbg("In callback fallback #{message_id}")
     Task.async(fn -> Telegex.answer_callback_query(message_id) end)
 
     Telegex.send_message(
       chat_id,
-      "Busca em " <> callback_data,
+      "Aconteceu um erro com #{callback_data}",
       parse_mode: "MarkdownV2"
     )
 
@@ -390,7 +390,30 @@ defmodule SescheduleWeb.TelegramController do
     |> halt
   end
 
-  @spec category_where_when(binary()) :: {binary(), binary(), binary()}
+  @spec update(Plug.Conn.t(), %{
+          bot_token: String.t(),
+          callback_query: Telegex.Type.CallbackQuery.t(),
+          update_id: Integer
+        }) :: Plug.Conn.t()
+  def update(conn, %{
+        "message" => %{
+          "chat" => %{"id" => chat_id},
+          "text" => text,
+        }
+      }) do
+    dbg("In fallback #{chat_id}")
+
+    Telegex.send_message(
+      chat_id,
+      "Não reconheço esse comando: #{text}",
+      parse_mode: "MarkdownV2"
+    )
+
+    conn
+    |> render(:update)
+    |> halt
+  end
+
   def category_where_when(callback_data) do
     ["p:" <> page, "c:" <> category, "w:" <> where, "d:" <> when_] =
       String.split(callback_data, "|")

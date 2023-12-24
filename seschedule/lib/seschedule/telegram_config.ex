@@ -1,4 +1,5 @@
 defmodule Seschedule.TelegramConfig do
+  require Logger
   use GenServer
 
   def start_link(default) when is_list(default) do
@@ -13,6 +14,8 @@ defmodule Seschedule.TelegramConfig do
     Telegex.set_webhook("#{domain}/webhook/#{token}",
       allowed_updates: ["message", "poll", "callback_query"]
     )
+
+    Logger.info("Domains et to #{domain}/webhook/#{token}")
 
     Telegex.set_my_commands(
       [
