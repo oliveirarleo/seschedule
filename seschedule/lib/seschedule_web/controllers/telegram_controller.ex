@@ -2,12 +2,73 @@ defmodule SescheduleWeb.TelegramController do
   alias Seschedule.SESCAPI
   use SescheduleWeb, :controller
 
+  # TODO: cleanup update functions
+  # TODO: separate behavior for each flow in modules
   @spec update(Plug.Conn.t(), %{
           bot_token: String.t(),
           message: Telegex.Type.MessageEntity.t(),
           update_id: Integer
         }) :: Plug.Conn.t()
-  def update(conn, %{"message" => %{"chat" => %{"id" => chat_id}}}) do
+
+  def update(conn, %{
+        "message" => %{
+          "chat" => %{"id" => chat_id},
+          "text" => "/start",
+          "entities" => [%{"type" => "bot_command"}]
+        }
+      }) do
+    Telegex.send_message(
+      chat_id,
+      """
+      *Olá,*
+      #{clean_text_for_markdown("Eu sou um bot não oficial de eventos do SESC, de uma olhada nos meus comandos no menu.")}
+      """,
+      parse_mode: "MarkdownV2"
+    )
+
+    conn
+    |> render(:update)
+    |> halt
+  end
+
+  @spec update(Plug.Conn.t(), %{
+          bot_token: String.t(),
+          message: Telegex.Type.MessageEntity.t(),
+          update_id: Integer
+        }) :: Plug.Conn.t()
+
+  def update(conn, %{
+        "message" => %{
+          "chat" => %{"id" => chat_id},
+          "text" => "/lembrete",
+          "entities" => [%{"type" => "bot_command"}]
+        }
+      }) do
+    Telegex.send_message(
+      chat_id,
+      """
+      #{clean_text_for_markdown("Por enquanto não tenho suporte para esse comando.")}
+      """,
+      parse_mode: "MarkdownV2"
+    )
+
+    conn
+    |> render(:update)
+    |> halt
+  end
+
+  @spec update(Plug.Conn.t(), %{
+          bot_token: String.t(),
+          message: Telegex.Type.MessageEntity.t(),
+          update_id: Integer
+        }) :: Plug.Conn.t()
+  def update(conn, %{
+        "message" => %{
+          "chat" => %{"id" => chat_id},
+          "text" => "/eventos",
+          "entities" => [%{"type" => "bot_command"}]
+        }
+      }) do
     Telegex.send_message(
       chat_id,
       "Olá, quer dar uma olhada nos próximos eventos ou fazer uma pesquisa avançada?",
@@ -88,6 +149,7 @@ defmodule SescheduleWeb.TelegramController do
       }) do
     dbg("In random #{message_id}")
     Task.async(fn -> Telegex.answer_callback_query(message_id) end)
+    Task.async(fn -> Telegex.send_chat_action(chat_id, "typing") end)
 
     {activities, %{"value" => total_events}} = SESCAPI.get(ppp: 10000)
 
@@ -359,26 +421,57 @@ defmodule SescheduleWeb.TelegramController do
   end
 
   @spec send_activities_messages(integer(), list()) :: list()
-  def send_activities_messages(chat_id, activities) do
+  defp send_activities_messages(chat_id, activities) do
+    # dbg(activities)
     for %{
           "titulo" => raw_title,
           "complemento" => raw_description,
           "imagem" => image_link,
-          "link" => link
+          "link" => link,
+          "categorias" => categories,
+          "dataPrimeiraSessao" => firstSession,
+          "dataUltimaSessao" => lastSession,
+          "unidade" => place
         } <- activities do
       title = clean_text_for_markdown(raw_title)
       description = clean_text_for_markdown(raw_description)
 
+      categories =
+        categories
+        |> Enum.map(
+          &"[#{clean_text_for_markdown(&1["titulo"])}](https://www.sescsp.org.br#{&1["link"]})"
+        )
+        |> Enum.join(", ")
+
+      firstSession = clean_text_for_markdown(firstSession)
+      lastSession = clean_text_for_markdown(lastSession)
+
+      place =
+        place
+        |> Enum.map(
+          &"[#{clean_text_for_markdown(&1["name"])}](https://www.sescsp.org.br#{&1["link"]})"
+        )
+        |> Enum.join(" , ")
+
+      text = """
+      *[#{title}](https://www.sescsp.org.br#{link})*
+      #{description}
+      #{categories}
+      Primeira sessão: #{firstSession}
+      Última sessão: #{lastSession}
+      Unidade: #{place}
+      """
+
       Telegex.send_photo(
         chat_id,
         image_link,
-        caption: "*[#{title}](https://www.sescsp.org.br#{link})*\n#{description}",
+        caption: text,
         parse_mode: "MarkdownV2"
       )
     end
   end
 
-  def clean_text_for_markdown(text) do
+  defp clean_text_for_markdown(text) do
     String.replace(
       text,
       [
@@ -405,7 +498,7 @@ defmodule SescheduleWeb.TelegramController do
     )
   end
 
-  def get_places_inline_keyboard(callback_data) do
+  defp get_places_inline_keyboard(callback_data) do
     # TODO: pagination
     places = Application.fetch_env!(:seschedule, :places)
 
@@ -419,7 +512,7 @@ defmodule SescheduleWeb.TelegramController do
     |> Enum.chunk_every(3)
   end
 
-  def get_categories_inline_keyboard(callback_data) do
+  defp get_categories_inline_keyboard(callback_data) do
     # TODO: pagination
     categories = Application.fetch_env!(:seschedule, :categories)
 

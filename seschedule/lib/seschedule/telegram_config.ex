@@ -19,16 +19,26 @@ defmodule Seschedule.TelegramConfig do
         %Telegex.Type.BotCommand{
           command: "eventos",
           description: "Veja os últimos eventos do SESC"
-        },
-        %Telegex.Type.BotCommand{command: "lembrete", description: "Crie um lembrete para um evento"}
+        }
+        # TODO: remind me feature
+        # TODO: support for multiple languages
+        # %Telegex.Type.BotCommand{
+        #   command: "lembrete",
+        #   description: "Crie um lembrete para um evento"
+        # }
       ],
       language_code: "pt"
     )
 
     Telegex.set_my_commands(
       [
-        %Telegex.Type.BotCommand{command: "events", description: "See all latests SESC events"},
-        %Telegex.Type.BotCommand{command: "remind", description: "Remind me of an event"}
+        %Telegex.Type.BotCommand{
+          command: "eventos",
+          description: "Veja os últimos eventos do SESC"
+        }
+        # TODO: remind me feature
+        # TODO: support for multiple languages
+        # %Telegex.Type.BotCommand{command: "lembrete", description: "Crie um lembrete para um evento"}
       ],
       language_code: "en"
     )
