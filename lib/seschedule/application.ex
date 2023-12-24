@@ -8,9 +8,10 @@ defmodule Seschedule.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      Seschedule.Periodically,
       Seschedule.HookHandler
     ]
+
+    dbg(Telegex.get_me())
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options

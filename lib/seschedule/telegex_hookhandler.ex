@@ -4,20 +4,30 @@ defmodule Seschedule.HookHandler do
   @impl true
   def on_boot do
     # read some parameters from your env config
-    env_config = Application.get_env(:seschedule, __MODULE__)
+    webhook_url = Application.get_env(:seschedule, :webhook_url)
+    server_port = Application.get_env(:seschedule, :server_port)
     # delete the webhook and set it again
-    # {:ok, true} = Telegex.delete_webhook()
-    # set the webhook (url is required)
-    {:ok, true} = Telegex.set_webhook(env_config[:webhook_url])
-    # specify port for web server
-    # port has a default value of 4000, but it may change with library upgrades
-    %Telegex.Hook.Config{server_port: env_config[:server_port]}
-    # you must return the `Telegex.Hook.Config` struct ↑
+    dbg(webhook_url)
+    dbg(server_port)
+
+    {:ok, true} = Telegex.delete_webhook()
+    {:ok, true} = Telegex.set_webhook(webhook_url)
+
+    %Telegex.Hook.Config{server_port: server_port}
   end
 
   @impl true
-  def on_update(update) do
+  @spec on_update(Telegex.Type.Update.t()) :: :ok | Telegex.Chain.result()
+  def on_update(%Telegex.Type.Update{
+        message: %Telegex.Type.Message{
+          chat: %{id: chat_id},
+          text: text
+        }
+        # update_id: update_id
+      }) do
     # consume the update
-    :ok
+    dbg(chat_id)
+    dbg(text)
+    Telegex.send_message(chat_id, "you've sent me #{text}")
   end
 end

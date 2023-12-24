@@ -22,9 +22,12 @@ defmodule Seschedule.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:req, "~> 0.4.0"}, # TODO: remove in favor of tesla
       {:telegex, "~> 1.3.2"},
+      {:finch, "~> 0.16.0"},
       {:multipart, "~> 0.4.0"},
+      {:plug, "~> 1.15"},
+      {:remote_ip, "~> 1.1"},
+      {:bandit, "~> 1.1"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false}
     ]
