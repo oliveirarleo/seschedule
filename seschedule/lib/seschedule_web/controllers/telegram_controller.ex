@@ -1,4 +1,5 @@
 defmodule SescheduleWeb.TelegramController do
+  require Logger
   alias Seschedule.SESCAPI
   use SescheduleWeb, :controller
 
@@ -114,7 +115,7 @@ defmodule SescheduleWeb.TelegramController do
           "message" => %{"chat" => %{"id" => chat_id}}
         }
       }) do
-    dbg("In next_events #{message_id}")
+    Logger.debug("In next_events #{message_id}")
     Task.async(fn -> Telegex.answer_callback_query(message_id) end)
 
     # TODO: put as config
@@ -147,7 +148,7 @@ defmodule SescheduleWeb.TelegramController do
           "message" => %{"chat" => %{"id" => chat_id}}
         }
       }) do
-    dbg("In random #{message_id}")
+    Logger.debug("In random #{message_id}")
     Task.async(fn -> Telegex.answer_callback_query(message_id) end)
     Task.async(fn -> Telegex.send_chat_action(chat_id, "typing") end)
 
@@ -180,7 +181,7 @@ defmodule SescheduleWeb.TelegramController do
           "message" => %{"chat" => %{"id" => chat_id}}
         }
       }) do
-    dbg("In when #{message_id}")
+    Logger.debug("In when #{message_id}")
     Task.async(fn -> Telegex.answer_callback_query(message_id) end)
 
     # TODO: use protobuf for callback_data
@@ -229,7 +230,7 @@ defmodule SescheduleWeb.TelegramController do
           "message" => %{"chat" => %{"id" => chat_id}}
         }
       }) do
-    dbg("In where #{message_id}")
+    Logger.debug("In where #{message_id}")
     Task.async(fn -> Telegex.answer_callback_query(message_id) end)
 
     # TODO: pagination
@@ -259,11 +260,11 @@ defmodule SescheduleWeb.TelegramController do
           "message" => %{"chat" => %{"id" => chat_id}}
         }
       }) do
-    dbg("In cat #{message_id}")
+    Logger.debug("In cat #{message_id}")
     Task.async(fn -> Telegex.answer_callback_query(message_id) end)
 
     ci = get_categories_inline_keyboard(callback_data)
-    dbg(ci)
+    Logger.debug(ci)
 
     Telegex.send_message(
       chat_id,
@@ -291,7 +292,7 @@ defmodule SescheduleWeb.TelegramController do
           "message" => %{"chat" => %{"id" => chat_id}}
         }
       }) do
-    dbg("In final #{message_id}")
+    Logger.debug("In final #{message_id}")
 
     Task.async(fn -> Telegex.answer_callback_query(message_id) end)
     Task.async(fn -> Telegex.send_chat_action(chat_id, "typing") end)
@@ -376,7 +377,7 @@ defmodule SescheduleWeb.TelegramController do
           "message" => %{"chat" => %{"id" => chat_id}}
         }
       }) do
-    dbg("In callback fallback #{message_id}")
+    Logger.debug("In callback fallback #{message_id}")
     Task.async(fn -> Telegex.answer_callback_query(message_id) end)
 
     Telegex.send_message(
@@ -401,7 +402,7 @@ defmodule SescheduleWeb.TelegramController do
           "text" => text,
         }
       }) do
-    dbg("In fallback #{chat_id}")
+    Logger.debug("In fallback #{chat_id}")
 
     Telegex.send_message(
       chat_id,
@@ -445,7 +446,6 @@ defmodule SescheduleWeb.TelegramController do
 
   @spec send_activities_messages(integer(), list()) :: list()
   defp send_activities_messages(chat_id, activities) do
-    # dbg(activities)
     for %{
           "titulo" => raw_title,
           "complemento" => raw_description,
