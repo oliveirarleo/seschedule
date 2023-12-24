@@ -70,6 +70,7 @@ config :seschedule,
 import_config "#{config_env()}.exs"
 
 config :seschedule,
+  events_per_page: 5,
   categories: [
     all: "Todas",
     "artes-visuais": "artes visuais",

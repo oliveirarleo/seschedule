@@ -119,7 +119,7 @@ defmodule SescheduleWeb.TelegramController do
     Task.async(fn -> Telegex.answer_callback_query(message_id) end)
 
     # TODO: put as config
-    num_events = 5
+    num_events = Application.fetch_env!(:seschedule, :events_per_page)
 
     {activities, %{"value" => total_events}} =
       SESCAPI.get(ppp: num_events)
@@ -154,7 +154,7 @@ defmodule SescheduleWeb.TelegramController do
 
     {activities, %{"value" => total_events}} = SESCAPI.get(ppp: 10000)
 
-    num_events = 5
+    num_events = Application.fetch_env!(:seschedule, :events_per_page)
     activities = Enum.take_random(activities, num_events)
 
     Telegex.send_message(
@@ -299,7 +299,7 @@ defmodule SescheduleWeb.TelegramController do
 
     {page, category, where, when_} = category_where_when("p:" <> callback_data)
 
-    num_take_events = 7
+    num_take_events = Application.fetch_env!(:seschedule, :events_per_page)
 
     {activities, %{"value" => total_events}} =
       SESCAPI.get(
