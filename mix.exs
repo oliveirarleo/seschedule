@@ -15,7 +15,7 @@ defmodule Seschedule.MixProject do
   def application do
     [
       extra_applications: [:logger],
-      mod: {Seschedule.Application, []}
+      mod: {Seschedule.Application, [env: Mix.env()]}
     ]
   end
 

@@ -6,12 +6,13 @@ defmodule Seschedule.Application do
   use Application
 
   @impl true
-  def start(_type, _args) do
-    children = [
-      Seschedule.HookHandler
-    ]
-
-    dbg(Telegex.get_me())
+  def start(_type, args) do
+    dbg(args)
+    children =
+      case args do
+        [env: :test] -> []
+        _ -> [Seschedule.HookHandler]
+      end
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
