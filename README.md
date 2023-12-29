@@ -5,16 +5,7 @@ A bot for telegram
 ## Using in dev environment
 
   * Run `mix setup` to install and setup dependencies
-  * Inspired by [this guide](https://ohanhi.com/phoenix-ssl-localhost), create your self-signed cert and keys:
-  ```bash
-  mkdir priv/migrations
-  mkdir priv/keys
-  cd priv/keys
-  # generate key
-  openssl genrsa -out localhost.key 2048
-  # generate cert
-  openssl req -new -x509 -key localhost.key -out localhost.cert -days 3650 -subj /CN=localhost
-  ```
+  * Run `mix phx.gen.cert` to generate certificates
   * Install ngrok and run `ngrok http https://localhost:8443`
   * Update dev.secret.exs with your new url and token, example:
 

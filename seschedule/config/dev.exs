@@ -19,8 +19,9 @@ config :seschedule, SescheduleWeb.Endpoint,
   # http: [ip: {127, 0, 0, 1}, port: 4000],
   https: [
     port: 8443,
-    keyfile: "priv/keys/localhost.key",
-    certfile: "priv/keys/localhost.cert"
+    cipher_suite: :strong,
+    keyfile: "priv/cert/selfsigned_key.pem",
+    certfile: "priv/cert/selfsigned.pem"
   ],
   check_origin: false,
   code_reloader: true,

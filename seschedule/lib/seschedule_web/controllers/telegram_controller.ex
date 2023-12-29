@@ -322,6 +322,13 @@ defmodule SescheduleWeb.TelegramController do
         )
 
       events ->
+        num_events =
+          if page <= div(total_events, num_take_events) do
+            num_take_events
+          else
+            rem(total_events, num_take_events)
+          end
+
         Telegex.send_message(
           chat_id,
           "*Pesquisa*\n" <>
@@ -330,7 +337,7 @@ defmodule SescheduleWeb.TelegramController do
             Categoria: #{if category == "", do: "Todas", else: category}
             Até #{when_}
             Número de eventos encontrados #{total_events}#{if total_events > num_take_events do
-              ".\nAqui estão #{num_take_events} eventos da página #{page}"
+              ".\nAqui estão #{num_events} eventos da página #{page}"
             end}:
             """),
           parse_mode: "MarkdownV2"
@@ -399,7 +406,7 @@ defmodule SescheduleWeb.TelegramController do
   def update(conn, %{
         "message" => %{
           "chat" => %{"id" => chat_id},
-          "text" => text,
+          "text" => text
         }
       }) do
     Logger.debug("In fallback #{chat_id}")
@@ -484,6 +491,12 @@ defmodule SescheduleWeb.TelegramController do
       Última sessão: #{lastSession}
       Unidade: #{place}
       """
+
+      # TODO: it does not support all pics:
+      # The photo must be at most 10 MB in size.
+      # The photo's width and height must not exceed 10000 in total.
+      # Width and height ratio must be at most 20.
+      # That means we need to fetch the img and send as multipart
 
       Telegex.send_photo(
         chat_id,
