@@ -8,7 +8,7 @@ defmodule Seschedule.Handlers.Remider do
     {:ok, _} =
       Telegex.send_message(
         chat_id,
-        Texts.clean_text_for_markdown("Esta funcionalidade ainda não está disponível ainda."),
+        Texts.clean_text_for_markdown("Esta funcionalidade ainda não está disponível."),
         parse_mode: "MarkdownV2"
       )
     :ok

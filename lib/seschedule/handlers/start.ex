@@ -10,7 +10,7 @@ defmodule Seschedule.Handlers.Start do
       chat_id,
       """
       *Olá,*
-      #{Texts.clean_text_for_markdown("Eu sou um bot não oficial de eventos do SESC, de uma olhada nos meus comandos no menu.")}
+      #{Texts.clean_text_for_markdown("Eu sou um bot não oficial de eventos do SESC, dê uma olhada nos meus comandos no menu.")}
       """,
       parse_mode: "MarkdownV2"
     )
