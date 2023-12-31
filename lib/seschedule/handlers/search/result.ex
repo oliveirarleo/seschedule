@@ -4,39 +4,41 @@ defmodule Seschedule.Handlers.Search.Result do
   alias Seschedule.Encoding.Events.SearchRequest
   alias Seschedule.I18n.Cldr
 
+  @spec text_from_activity(Seschedule.Api.Event.t()) :: String.t()
   defp text_from_activity(activity) do
-    %{
-      "titulo" => raw_title,
-      "complemento" => raw_description,
-      "link" => link,
-      "categorias" => categories,
-      "dataPrimeiraSessao" => first_session,
-      "dataUltimaSessao" => last_session,
-      "unidade" => place
-    } = activity
+    # %Seschedule.Api.Event{
+    #   title: raw_title,
+    #   "complemento" => raw_description,
+    #   "link" => link,
+    #   "categorias" => categories,
+    #   "dataPrimeiraSessao" => first_session,
+    #   "dataUltimaSessao" => last_session,
+    #   "unidade" => place
+    # } = activity
 
-    title = clean_text_for_markdown(raw_title)
-    description = clean_text_for_markdown(raw_description)
+    title = clean_text_for_markdown(activity.title)
+    description = clean_text_for_markdown(activity.complement)
 
-    first_session = Cldr.sesc_date_to_string(first_session)
-    last_session = Cldr.sesc_date_to_string(last_session)
+    first_session =
+      activity.first_session |> Cldr.DateTime.to_string!(format: :short)
+
+    last_session =
+      activity.last_session |> Cldr.DateTime.to_string!(format: :short)
+
+    sesc_base_url = Application.fetch_env!(:seschedule, :sesc_base_url)
 
     categories =
-      categories
-      |> Enum.map(
-        &"[#{clean_text_for_markdown(&1["titulo"])}](https://www.sescsp.org.br#{&1["link"]})"
-      )
+      activity.categories
+      |> Enum.map(fn {name, link} -> "[#{clean_text_for_markdown(name)}](#{link})" end)
       |> Enum.join(", ")
 
     place =
-      place
-      |> Enum.map(
-        &"[#{clean_text_for_markdown(&1["name"])}](https://www.sescsp.org.br#{&1["link"]})"
-      )
-      |> Enum.join(" , ")
+      activity.unit
+      |> Enum.map(fn {name, link} -> "[#{clean_text_for_markdown(name)}](#{link})" end)
+      |> Enum.join(", ")
 
     """
-    *[#{title}](https://www.sescsp.org.br#{link})*
+    *[#{title}](#{sesc_base_url}#{activity.link})*
     #{if "" != String.trim(description) do
       "#{description}\n"
     else
@@ -48,13 +50,13 @@ defmodule Seschedule.Handlers.Search.Result do
     """
   end
 
-  @spec send_activities_messages(integer(), list()) :: :ok
+  @spec send_activities_messages(integer(), [Seschedule.Api.Event.t()]) :: :ok
   def send_activities_messages(chat_id, activities) do
     for activity <- activities do
       text = text_from_activity(activity)
       Logger.info(text)
 
-      %{"imagem" => image_link} = activity
+      image_link = activity.image_link
 
       case Telegex.send_photo(
              chat_id,

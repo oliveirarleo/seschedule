@@ -1,3 +1,4 @@
+# TODO: move to i18n folder
 defmodule Seschedule.Handlers.Search.Texts do
   @doc """
   Get text for all places, the order of this list will set the order in the menu

@@ -130,7 +130,7 @@ defmodule Seschedule.Handlers.Search do
 
     num_take_events = Application.fetch_env!(:seschedule, :events_per_page)
 
-    {activities, %{"value" => total_events}} =
+    {activities, total_events} =
       Seschedule.Api.SescSp.get_events(
         data_final: date_for_api,
         local: place_for_api,

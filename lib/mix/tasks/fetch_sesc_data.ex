@@ -6,8 +6,10 @@ defmodule Mix.Tasks.FetchSescData do
   def run(_) do
     {:ok, _} = Application.ensure_all_started(:req)
 
+    sesc_api_url = Application.fetch_env!(:seschedule, :sesc_api_url)
+
     response =
-      Req.get!("https://www.sescsp.org.br/wp-json/wp/v1/atividades/filter",
+      Req.get!(sesc_api_url,
         params: [
           data_inicial: Date.utc_today() |> Date.to_string(),
           data_final: Date.utc_today() |> Date.add(350) |> Date.to_string(),

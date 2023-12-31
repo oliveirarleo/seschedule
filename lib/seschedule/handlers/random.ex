@@ -11,7 +11,7 @@ defmodule Seschedule.Handlers.Random do
     Logger.info("In random: #{chat_id}")
     # Task.async(fn -> Telegex.send_chat_action(chat_id, "typing") end)
 
-    {activities, %{"value" => total_events}} = SescSp.get_events(ppp: 500)
+    {activities, total_events} = SescSp.get_events(ppp: 500)
 
     num_events = Application.fetch_env!(:seschedule, :events_per_page)
     activities = Enum.take_random(activities, num_events)

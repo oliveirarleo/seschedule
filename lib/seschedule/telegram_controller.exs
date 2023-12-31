@@ -22,7 +22,7 @@ defmodule Seschedule.TelegramController do
 
     num_take_events = Application.fetch_env!(:seschedule, :events_per_page)
 
-    {activities, %{"value" => total_events}} =
+    {activities, total_events} =
       SescSp.get_events(
         data_final: when_,
         local: where,

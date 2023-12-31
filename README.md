@@ -49,9 +49,9 @@ Create more doctests and tests.
 
 Ensure tests and docs are complete via CI.
 
-### Random filters
+### Random command filters
 
-Random events using filters:
+Random events from command using filters:
 * Filter by city
 * Filter by category
 

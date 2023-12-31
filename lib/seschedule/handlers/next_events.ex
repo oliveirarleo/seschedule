@@ -12,7 +12,7 @@ defmodule Seschedule.Handlers.NextEvents do
 
     num_events = Application.fetch_env!(:seschedule, :events_per_page)
 
-    {activities, %{"value" => total_events}} = SescSp.get_events(ppp: num_events)
+    {activities, total_events} = SescSp.get_events(ppp: num_events)
 
     {:ok, _message} =
       Telegex.send_message(
