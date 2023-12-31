@@ -101,7 +101,7 @@ defmodule Seschedule.Handlers.Search.Result do
     category_for_api =
       case category do
         :ALL_CATEGORIES -> ""
-        category -> category |> Atom.to_string() |> String.downcase()
+        category -> category |> Atom.to_string() |> String.downcase() |> String.replace("_", "-")
       end
 
     days_to_search =
