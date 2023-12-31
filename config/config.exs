@@ -14,6 +14,4 @@ config :seschedule,
   events_per_page: 5,
   sesc_api_url: "https://www.sescsp.org.br/wp-json/wp/v1/atividades/filter"
 
-import_config "seschedule.exs"
-
 import_config "#{config_env()}.exs"
