@@ -76,8 +76,17 @@ defmodule Seschedule.HookHandler do
           text: "/" <> command
         }
       } ->
-        {:ok, %{handler: handler}} = @commands_config |> Map.fetch(command)
-        handler.(chat_id)
+        case @commands_config |> Map.fetch(command) do
+          {:ok, %{handler: handler}} ->
+            handler.(chat_id)
+
+          :error ->
+            Telegex.send_message(
+              chat_id,
+              "Não reconheço o comando #{command}",
+              parse_mode: "MarkdownV2"
+            )
+        end
 
       %Telegex.Type.Update{
         callback_query: %Telegex.Type.CallbackQuery{
