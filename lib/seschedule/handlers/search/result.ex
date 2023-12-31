@@ -100,8 +100,6 @@ defmodule Seschedule.Handlers.Search.Result do
     last_session =
       activity.last_session |> Cldr.DateTime.to_string!(format: :short)
 
-    sesc_base_url = Application.fetch_env!(:seschedule, :sesc_base_url)
-
     categories =
       activity.categories
       |> Enum.map(fn {name, link} -> "[#{clean_text_for_markdown(name)}](#{link})" end)
@@ -113,7 +111,7 @@ defmodule Seschedule.Handlers.Search.Result do
       |> Enum.join(", ")
 
     """
-    *[#{title}](#{sesc_base_url}#{activity.link})*
+    *[#{title}](#{activity.link})*
     #{if "" != String.trim(description) do
       "#{description}\n"
     else
