@@ -66,4 +66,35 @@ defmodule Seschedule.Handlers.Search.Places do
       inline_keyboard: inline_keyboard
     }
   end
+
+  def grande_sp_places() do
+    [
+      :_14_BIS,
+      :_24_DE_MAIO,
+      :AVENIDA_PAULISTA,
+      :BELENZINHO,
+      :BOM_RETIRO,
+      :CAMPO_LIMPO,
+      :CARMO,
+      :CASA_VERDE,
+      :CENTRO_DE_PESQUISA_E_FORMACAO,
+      :CINESESC,
+      :CONSOLACAO,
+      :FLORENCIO_DE_ABREU,
+      :GUARULHOS,
+      :INTERLAGOS,
+      :IPIRANGA,
+      :ITAQUERA,
+      :MOGI_DAS_CRUZES,
+      :OSASCO,
+      :PARQUE_DOM_PEDRO_II,
+      :PINHEIROS,
+      :POMPEIA,
+      :SANTANA,
+      :SANTO_AMARO,
+      :SANTO_ANDRE,
+      :SAO_CAETANO,
+      :VILA_MARIANA
+    ]
+  end
 end

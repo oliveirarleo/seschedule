@@ -7,7 +7,7 @@ defmodule Seschedule.Handlers.Search.Texts do
   def places do
     [
       ALL_PLACES: "Todas",
-      _24_DE_MAIO: "24 de Maio",
+      GRANDE_SP: "Grande São Paulo",
       ARARAQUARA: "Araraquara",
       BAURU: "Bauru",
       BERTIOGA: "Bertioga",
@@ -49,7 +49,8 @@ defmodule Seschedule.Handlers.Search.Texts do
       GUARULHOS: "Guarulhos",
       MOGI_DAS_CRUZES: "Mogi das Cruzes",
       CASA_VERDE: "Casa Verde",
-      _14_BIS: "14 Bis"
+      _14_BIS: "14 Bis",
+      _24_DE_MAIO: "24 de Maio"
     ]
   end
 

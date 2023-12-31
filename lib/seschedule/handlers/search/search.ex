@@ -126,7 +126,14 @@ defmodule Seschedule.Handlers.Search do
 
     events = Seschedule.Api.Cache.get_events() |> Enum.map(fn {_, v} -> v end)
     events = events |> Enum.sort_by(fn v -> v.first_session end)
-    activities = Result.filter_events(events, [place], category, date)
+
+    places =
+      case place do
+        :GRANDE_SP -> Seschedule.Handlers.Search.Places.grande_sp_places()
+        place -> [place]
+      end
+
+    activities = Result.filter_events(events, places, category, date)
     total_events = length(activities)
 
     num_events =

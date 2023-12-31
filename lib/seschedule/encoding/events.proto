@@ -9,6 +9,7 @@ message SearchRequest {
 
   enum Place {
     ALL_PLACES = 0;
+    GRANDE_SP = 1;
     _24_DE_MAIO = 2;
     ARARAQUARA = 25;
     BAURU = 26;

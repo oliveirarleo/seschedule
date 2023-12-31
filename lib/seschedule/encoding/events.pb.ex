@@ -56,6 +56,12 @@ defmodule Seschedule.Encoding.Events.SearchRequest.Place do
           __unknown_fields__: []
         },
         %Google.Protobuf.EnumValueDescriptorProto{
+          name: "GRANDE_SP",
+          number: 1,
+          options: nil,
+          __unknown_fields__: []
+        },
+        %Google.Protobuf.EnumValueDescriptorProto{
           name: "_24_DE_MAIO",
           number: 2,
           options: nil,
@@ -328,6 +334,7 @@ defmodule Seschedule.Encoding.Events.SearchRequest.Place do
   end
 
   field :ALL_PLACES, 0
+  field :GRANDE_SP, 1
   field :_24_DE_MAIO, 2
   field :ARARAQUARA, 25
   field :BAURU, 26
@@ -692,6 +699,12 @@ defmodule Seschedule.Encoding.Events.SearchRequest do
             %Google.Protobuf.EnumValueDescriptorProto{
               name: "ALL_PLACES",
               number: 0,
+              options: nil,
+              __unknown_fields__: []
+            },
+            %Google.Protobuf.EnumValueDescriptorProto{
+              name: "GRANDE_SP",
+              number: 1,
               options: nil,
               __unknown_fields__: []
             },
