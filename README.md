@@ -1,21 +1,56 @@
 # Seschedule
 
-**TODO: Add description**
+A bot for telegram that searches [SESC](https://www.sescsp.org.br/) events and reminds about them.
 
-## Installation
+## Using in dev environment
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `seschedule` to your list of dependencies in `mix.exs`:
+  * Run `mix setup` to install and setup dependencies
+  * Install ngrok and run `ngrok http 8443`
+  * Update `dev.exs` and `dev.secret.exs` with your new url and token, example:
 
-```elixir
-def deps do
-  [
-    {:seschedule, "~> 0.1.0"}
-  ]
-end
-```
+  ```elixir
+  config :seschedule, webhook_url: "https://long-ngrok-url.com" # on dev.exs
+  config :telegex, token: "123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11" # on dev.secret.exs
+  ```
+  > Tip: You can create a fixed domain in ngrok in the [domain page](https://dashboard.ngrok.com/cloud-edge/domains)
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/seschedule>.
+  * Start server with inside IEx with `iex -S mix`
 
+
+## Deploying in fly.io
+
+  * Use this `fly.toml` with `fly apps create --name {{yourappname}}` to create an app
+  * Set the correct secrets:
+  ```elixir
+  config :seschedule, webhook_url: "https://{{yourappname}}.fly.dev" # on prod.exs
+  config :telegex, token: "{{bot-token}}" # on prod.secret.exs
+  ```
+  * Run `fly deploy`
+  > Tip: `fly scale count 1`, if you want to have only one machine working at a time
+
+
+
+## TODO:
+
+In order of relevance.
+
+### Tests:
+
+Create more doctests and tests. In particular it'll be nice to test if Texts places, categories, and dates matches with protobuf.
+
+### Docs
+
+Ensure docs for every module and method.
+Generate docs page.
+
+### CI
+
+Ensure tests and docs are complete via CI.
+
+### Remind:
+
+Create workflow for remind functionallity
+
+### I18n:
+
+Give support for english and french.
