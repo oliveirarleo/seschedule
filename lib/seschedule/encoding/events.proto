@@ -1,6 +1,5 @@
 syntax = "proto3";
 
-
 message SearchRequest {
   enum Date {
     NEXT_WEEK = 0;
@@ -10,7 +9,7 @@ message SearchRequest {
 
   enum Place {
     ALL_PLACES = 0;
-    VINTE_E_QUATRO_DE_MAIO = 2;
+    _24_DE_MAIO = 2;
     ARARAQUARA = 25;
     BAURU = 26;
     BERTIOGA = 27;
@@ -52,7 +51,7 @@ message SearchRequest {
     GUARULHOS = 71;
     MOGI_DAS_CRUZES = 80;
     CASA_VERDE = 730;
-    QUATORZE_BIS = 761;
+    _14_BIS = 761;
     PLACE_NOT_SET = 1000;
   }
 

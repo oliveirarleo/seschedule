@@ -10,11 +10,11 @@ defmodule Seschedule.Handlers.Search.Result do
       places_for_search =
         places
         |> Enum.map(fn place ->
-          case place do
-            :VINTE_E_QUATRO_DE_MAIO -> "24-de-maio"
-            :QUATORZE_BIS -> "14-bis"
-            place -> place |> Atom.to_string() |> String.downcase() |> String.replace("_", "-")
-          end
+          place
+          |> Atom.to_string()
+          |> String.downcase()
+          |> String.trim("_")
+          |> String.replace("_", "-")
         end)
 
       # places_tuple comes from Seschedule.Api.Event.unit

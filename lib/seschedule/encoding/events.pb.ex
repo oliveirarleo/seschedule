@@ -56,7 +56,7 @@ defmodule Seschedule.Encoding.Events.SearchRequest.Place do
           __unknown_fields__: []
         },
         %Google.Protobuf.EnumValueDescriptorProto{
-          name: "VINTE_E_QUATRO_DE_MAIO",
+          name: "_24_DE_MAIO",
           number: 2,
           options: nil,
           __unknown_fields__: []
@@ -308,7 +308,7 @@ defmodule Seschedule.Encoding.Events.SearchRequest.Place do
           __unknown_fields__: []
         },
         %Google.Protobuf.EnumValueDescriptorProto{
-          name: "QUATORZE_BIS",
+          name: "_14_BIS",
           number: 761,
           options: nil,
           __unknown_fields__: []
@@ -328,7 +328,7 @@ defmodule Seschedule.Encoding.Events.SearchRequest.Place do
   end
 
   field :ALL_PLACES, 0
-  field :VINTE_E_QUATRO_DE_MAIO, 2
+  field :_24_DE_MAIO, 2
   field :ARARAQUARA, 25
   field :BAURU, 26
   field :BERTIOGA, 27
@@ -370,7 +370,7 @@ defmodule Seschedule.Encoding.Events.SearchRequest.Place do
   field :GUARULHOS, 71
   field :MOGI_DAS_CRUZES, 80
   field :CASA_VERDE, 730
-  field :QUATORZE_BIS, 761
+  field :_14_BIS, 761
   field :PLACE_NOT_SET, 1000
 end
 
@@ -696,7 +696,7 @@ defmodule Seschedule.Encoding.Events.SearchRequest do
               __unknown_fields__: []
             },
             %Google.Protobuf.EnumValueDescriptorProto{
-              name: "VINTE_E_QUATRO_DE_MAIO",
+              name: "_24_DE_MAIO",
               number: 2,
               options: nil,
               __unknown_fields__: []
@@ -948,7 +948,7 @@ defmodule Seschedule.Encoding.Events.SearchRequest do
               __unknown_fields__: []
             },
             %Google.Protobuf.EnumValueDescriptorProto{
-              name: "QUATORZE_BIS",
+              name: "_14_BIS",
               number: 761,
               options: nil,
               __unknown_fields__: []
