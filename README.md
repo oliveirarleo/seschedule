@@ -49,10 +49,25 @@ Create more doctests and tests.
 
 Ensure tests and docs are complete via CI.
 
-### Join "Grande São Paulo" requests
+### Random filters
+
+Random events using filters:
+* Filter by city
+* Filter by category
+
+### Create storage
 
 * Use a simple [Agent](https://hexdocs.pm/elixir/1.16.0/Agent.html) to manage the events, then our internal search can be more sofisticated.
-*Possibly save them using sqlite3 + Ecto.
+* Create a periodic call to API to update events (interval should be a config)
+* Simple in-memory should suffice
+
+### Order events using event date
+
+Currently the API is using its internal order, which is weird, if we search internally by our storage we can sort the events by date and place.
+
+### Join "Grande São Paulo" requests
+
+There is a reference for what SESC units are in Grande SP, if we search in storage we can 
 
 ### Give support for SESCs in other states
 
@@ -60,9 +75,24 @@ Currently the search is limited to SESC SP, although there is a lot of SESC unit
 * We must find what are the other SESCs websites and reverse engineer their APIs.
 * We must include them as options to search and possibly change the search flow a little bit.
 
+
+### Multiple choice in filters
+
+Give support for more than one filter:
+* More than one city
+* More than one category
+
 ### Remind:
 
 Create workflow for remind functionallity.
+
+### Use sqlite3 in storage
+
+Use sqlite3 and Ecto to save events in storage.
+
+### Feedback command
+
+Create a feedback command that sends an email for bug report and suggestions.
 
 ### I18n:
 
