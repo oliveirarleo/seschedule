@@ -36,21 +36,34 @@ In order of relevance.
 
 ### Tests:
 
-Create more doctests and tests. In particular it'll be nice to test if Texts places, categories, and dates matches with protobuf.
+Create more doctests and tests.
+* In particular it'll be nice to test if `Texts` `places`, `categories`, and `dates` matches with `protobufs`.
+* We will most likely need [Mox](https://hexdocs.pm/mox/Mox.html).
 
 ### Docs
 
-Ensure docs for every module and method.
-Generate docs page.
+* Ensure docs for every module and method.
+* Generate docs page.
 
 ### CI
 
 Ensure tests and docs are complete via CI.
 
+### Join "Grande São Paulo" requests
+
+* Use a simple [Agent](https://hexdocs.pm/elixir/1.16.0/Agent.html) to manage the events, then our internal search can be more sofisticated.
+*Possibly save them using sqlite3 + Ecto.
+
+### Give support for SESCs in other states
+
+Currently the search is limited to SESC SP, although there is a lot of SESC units in SP, there are tons in other states.
+* We must find what are the other SESCs websites and reverse engineer their APIs.
+* We must include them as options to search and possibly change the search flow a little bit.
+
 ### Remind:
 
-Create workflow for remind functionallity
+Create workflow for remind functionallity.
 
 ### I18n:
 
-Give support for english and french.
+Give support for english, spanish and french.
