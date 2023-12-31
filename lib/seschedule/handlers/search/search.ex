@@ -94,6 +94,7 @@ defmodule Seschedule.Handlers.Search do
     :ok
   end
 
+  # TODO: break this into many functions
   def handle_search_request(chat_id, message_id, %SearchRequest{
         place: place,
         place_page: place_page,
@@ -119,25 +120,29 @@ defmodule Seschedule.Handlers.Search do
         }
       )
 
-    {place_for_api, category_for_api, date_for_api} =
-      Result.prepare_search_args(place, category, date)
-
-    Logger.info(
-      "Request with #{chat_id}, #{message_id} place: #{place_for_api} #{place_page}, category: #{category_for_api} #{category_page}, date: #{date_for_api}, page: #{page}"
-    )
-
     typing_action = Task.async(fn -> Telegex.send_chat_action(chat_id, "typing") end)
 
     num_take_events = Application.fetch_env!(:seschedule, :events_per_page)
 
-    {activities, total_events} =
-      Seschedule.Api.SescSp.get_events(
-        data_final: date_for_api,
-        local: place_for_api,
-        categoria: category_for_api,
-        ppp: num_take_events,
-        page: page
-      )
+    events = Seschedule.Api.Cache.get_events() |> Enum.map(fn {_, v} -> v end)
+    events = events |> Enum.sort_by(fn v -> v.first_session end)
+    activities = Result.filter_events(events, [place], category, date)
+    total_events = length(activities)
+
+    num_events =
+      if page <= div(total_events, num_take_events) do
+        num_take_events
+      else
+        rem(total_events, num_take_events)
+      end
+
+    pagination_start_index = num_take_events * (page - 1)
+    pagination_end_index = num_take_events * (page - 1) + num_events - 1
+    activities = activities |> Enum.slice(pagination_start_index..pagination_end_index)
+
+    dbg(
+      "pagination_start_index: #{pagination_start_index}, pagination_end_index: #{pagination_end_index}, num_events: #{num_events},"
+    )
 
     case activities do
       [] ->
@@ -148,18 +153,11 @@ defmodule Seschedule.Handlers.Search do
         )
 
       events ->
-        num_events =
-          if page <= div(total_events, num_take_events) do
-            num_take_events
-          else
-            rem(total_events, num_take_events)
-          end
-
         Telegex.send_message(
           chat_id,
           Texts.clean_text_for_markdown("""
           Número de eventos encontrados #{total_events}#{if total_events > num_take_events do
-            ".\nAqui estão os eventos #{num_take_events * (page - 1) + 1} ... #{num_take_events * (page - 1) + num_events}"
+            ".\nAqui estão os eventos #{pagination_start_index + 1} ... #{pagination_end_index + 1}"
           end}:
           """),
           parse_mode: "MarkdownV2"

@@ -9,8 +9,14 @@ defmodule Seschedule.Application do
   def start(_type, args) do
     children =
       case args do
-        [env: :test] -> []
-        _ -> [Seschedule.HookHandler, {Finch, name: MyFinch}, {Seschedule.Api.Storage, %{}}]
+        [env: :test] ->
+          []
+
+        _ ->
+          [
+            Seschedule.HookHandler,
+            {Seschedule.Api.Cache, %{}}
+          ]
       end
 
     # See https://hexdocs.pm/elixir/Supervisor.html

@@ -1,21 +1,96 @@
 defmodule Seschedule.Handlers.Search.Result do
   require Logger
   import Seschedule.Handlers.Search.Texts
-  alias Seschedule.Encoding.Events.SearchRequest
+  alias Seschedule.Api.Event
   alias Seschedule.I18n.Cldr
+
+  @spec filter_events_by_places([Event.t()], [atom()]) :: [Event.t()]
+  def filter_events_by_places(events, places) do
+    if Enum.find(places, fn place -> place == :ALL_PLACES end) == nil do
+      places_for_search =
+        places
+        |> Enum.map(fn place ->
+          case place do
+            :VINTE_E_QUATRO_DE_MAIO -> "24-de-maio"
+            :QUATORZE_BIS -> "14-bis"
+            place -> place |> Atom.to_string() |> String.downcase() |> String.replace("_", "-")
+          end
+        end)
+
+      # places_tuple comes from Seschedule.Api.Event.unit
+      in_place_for_search =
+        fn places_tuple ->
+          {_, places_text} = places_tuple
+
+          places_for_search
+          |> Enum.find(fn place_for_search ->
+            String.ends_with?(places_text, place_for_search)
+          end)
+        end
+
+      events
+      |> Enum.filter(fn v ->
+        v.unit |> Enum.find(in_place_for_search) != nil
+      end)
+    else
+      events
+    end
+  end
+
+  @spec filter_events_by_category([Event.t()], atom()) :: [Event.t()]
+  def filter_events_by_category(events, category) do
+    if category == :ALL_CATEGORIES do
+      events
+    else
+      category_for_search =
+        category |> Atom.to_string() |> String.downcase() |> String.replace("_", "-")
+
+      # category_tuple comes from Seschedule.Api.Event.categories
+      in_category_for_search =
+        fn category_tuple ->
+          {_, category_text} = category_tuple
+          String.ends_with?(category_text, category_for_search)
+        end
+
+      events
+      |> Enum.filter(fn v ->
+        v.categories |> Enum.find(in_category_for_search) != nil
+      end)
+    end
+  end
+
+  @spec filter_events_by_date([Event.t()], :NEXT_3_MONTHS | :NEXT_MONTH | :NEXT_WEEK) :: [
+          Event.t()
+        ]
+  def filter_events_by_date(events, date) do
+    now_in_brazil = DateTime.utc_now() |> DateTime.add(-3, :hour)
+
+    before =
+      case date do
+        :NEXT_WEEK -> DateTime.add(now_in_brazil, 7, :day)
+        :NEXT_MONTH -> DateTime.add(now_in_brazil, 30, :day)
+        :NEXT_3_MONTHS -> DateTime.add(now_in_brazil, 90, :day)
+      end
+
+    events
+    |> Enum.filter(fn v ->
+      DateTime.after?(v.first_session, now_in_brazil) and
+        DateTime.before?(v.first_session, before)
+    end)
+  end
+
+  @spec filter_events([Seschedule.Api.Event.t()], [atom()], atom(), atom()) :: [
+          Seschedule.Api.Event.t()
+        ]
+  def filter_events(events, places, category, date) do
+    events = filter_events_by_date(events, date)
+    events = filter_events_by_category(events, category)
+    events = filter_events_by_places(events, places)
+    events
+  end
 
   @spec text_from_activity(Seschedule.Api.Event.t()) :: String.t()
   defp text_from_activity(activity) do
-    # %Seschedule.Api.Event{
-    #   title: raw_title,
-    #   "complemento" => raw_description,
-    #   "link" => link,
-    #   "categorias" => categories,
-    #   "dataPrimeiraSessao" => first_session,
-    #   "dataUltimaSessao" => last_session,
-    #   "unidade" => place
-    # } = activity
-
     title = clean_text_for_markdown(activity.title)
     description = clean_text_for_markdown(activity.complement)
 
@@ -54,7 +129,6 @@ defmodule Seschedule.Handlers.Search.Result do
   def send_activities_messages(chat_id, activities) do
     for activity <- activities do
       text = text_from_activity(activity)
-      Logger.info(text)
 
       image_link = activity.image_link
 
@@ -90,31 +164,5 @@ defmodule Seschedule.Handlers.Search.Result do
     end
 
     :ok
-  end
-
-  @spec prepare_search_args(atom(), atom(), atom()) ::
-          {String.t(), String.t(), String.t()}
-  def prepare_search_args(place, category, date) do
-    place_for_api =
-      SearchRequest.Place.descriptor().value
-      |> Enum.find(&(String.to_atom(&1.name) == place))
-      |> then(fn v -> v.number end)
-
-    category_for_api =
-      case category do
-        :ALL_CATEGORIES -> ""
-        category -> category |> Atom.to_string() |> String.downcase() |> String.replace("_", "-")
-      end
-
-    days_to_search =
-      case date do
-        :NEXT_WEEK -> 7
-        :NEXT_MONTH -> 30
-        :NEXT_3_MONTHS -> 90
-      end
-
-    date_for_api = Date.utc_today() |> Date.add(days_to_search) |> Date.to_string()
-
-    {place_for_api, category_for_api, date_for_api}
   end
 end

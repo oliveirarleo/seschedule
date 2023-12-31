@@ -55,16 +55,6 @@ Random events from command using filters:
 * Filter by city
 * Filter by category
 
-### Create storage
-
-* Use a simple [Agent](https://hexdocs.pm/elixir/1.16.0/Agent.html) to manage the events, then our internal search can be more sofisticated.
-* Create a periodic call to API to update events (interval should be a config)
-* Simple in-memory should suffice
-
-### Order events using event date
-
-Currently the API is using its internal order, which is weird, if we search internally by our storage we can sort the events by date and place.
-
 ### Join "Grande São Paulo" requests
 
 There is a reference for what SESC units are in Grande SP, if we search in storage we can 

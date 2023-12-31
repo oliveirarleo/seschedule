@@ -1,6 +1,5 @@
 defmodule Seschedule.Handlers.NextEvents do
   require Logger
-  alias Seschedule.Api.SescSp
   alias Seschedule.Handlers.Search.Result
 
   @spec next_events(String.t() | integer()) :: :ok
@@ -12,12 +11,16 @@ defmodule Seschedule.Handlers.NextEvents do
 
     num_events = Application.fetch_env!(:seschedule, :events_per_page)
 
-    {activities, total_events} = SescSp.get_events(ppp: num_events)
+    activities =
+      Seschedule.Api.Cache.get_events()
+      |> Enum.take(num_events)
+      |> Enum.map(fn {_, v} -> v end)
+      |> Enum.sort_by(fn v -> v.first_session end)
 
     {:ok, _message} =
       Telegex.send_message(
         chat_id,
-        "Encontrei #{total_events} eventos, estes são os próximos #{num_events} eventos:"
+        "Estes são os próximos #{num_events} eventos:"
       )
 
     Result.send_activities_messages(chat_id, activities)

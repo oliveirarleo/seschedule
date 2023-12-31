@@ -8,6 +8,7 @@ defmodule Seschedule.Api.SescSp do
   @doc """
   Make a request to sesc
   """
+  @spec get_events(keyword()) :: {list(), integer()}
   def get_events(filter_params \\ []) do
     sesc_api_url = Application.fetch_env!(:seschedule, :sesc_api_url)
 
@@ -56,13 +57,14 @@ defmodule Seschedule.Api.SescSp do
           title: event["titulo"] |> String.trim(),
           first_session: Cldr.sesc_date_to_date_time(event["dataPrimeiraSessao"]),
           last_session: Cldr.sesc_date_to_date_time(event["dataUltimaSessao"]),
-          link: event["link"] |> String.trim(),
+          link: "#{sesc_base_url}#{event["link"] |> String.trim()}",
           complement: event["complemento"] |> String.trim(),
           image_link: event["imagem"] |> String.trim(),
           unit:
             event["unidade"]
             |> Enum.map(
-              &{&1["name"] |> String.trim(), "#{sesc_base_url}#{&1["link"] |> String.trim()}"}
+              &{&1["name"] || "Online" |> String.trim(),
+               "#{sesc_base_url}#{&1["link"] || "" |> String.trim()}"}
             ),
           categories:
             event["categorias"]
