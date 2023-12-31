@@ -1,7 +1,7 @@
 defmodule Seschedule.Handlers.Random do
   require Logger
   alias Seschedule.Api.SescSp
-  alias Seschedule.Handlers.Helpers
+  alias Seschedule.Handlers.Search.Result
 
   @doc """
   This is the handler for the random_events command. It should send a message with some random events.
@@ -22,7 +22,7 @@ defmodule Seschedule.Handlers.Random do
         "De #{total_events} eventos no próximo mês, sorteei estes #{num_events} daqui para você:"
       )
 
-    Helpers.send_activities_messages(chat_id, activities)
+    Result.send_activities_messages(chat_id, activities)
 
     :ok
   end

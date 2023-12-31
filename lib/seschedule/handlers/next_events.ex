@@ -1,7 +1,7 @@
 defmodule Seschedule.Handlers.NextEvents do
   require Logger
   alias Seschedule.Api.SescSp
-  alias Seschedule.Handlers.Helpers
+  alias Seschedule.Handlers.Search.Result
 
   @spec next_events(String.t() | integer()) :: :ok
   @doc """
@@ -20,7 +20,7 @@ defmodule Seschedule.Handlers.NextEvents do
         "Encontrei #{total_events} eventos, estes são os próximos #{num_events} eventos:"
       )
 
-    Helpers.send_activities_messages(chat_id, activities)
+    Result.send_activities_messages(chat_id, activities)
 
     :ok
   end

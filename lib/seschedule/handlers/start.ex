@@ -1,5 +1,5 @@
 defmodule Seschedule.Handlers.Start do
-  alias Seschedule.Handlers.Helpers
+  alias Seschedule.Handlers.Search.Texts
 
   @doc """
   This is the handler for the start command. It should simply send a message to the user about the bot.
@@ -10,10 +10,11 @@ defmodule Seschedule.Handlers.Start do
       chat_id,
       """
       *Olá,*
-      #{Helpers.clean_text_for_markdown("Eu sou um bot não oficial de eventos do SESC, de uma olhada nos meus comandos no menu.")}
+      #{Texts.clean_text_for_markdown("Eu sou um bot não oficial de eventos do SESC, de uma olhada nos meus comandos no menu.")}
       """,
       parse_mode: "MarkdownV2"
     )
+
     :ok
   end
 end
