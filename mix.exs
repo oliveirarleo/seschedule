@@ -28,6 +28,13 @@ defmodule Seschedule.MixProject do
       {:plug, "~> 1.15"},
       {:remote_ip, "~> 1.1"},
       {:bandit, "~> 1.1"},
+      {:protobuf, "~> 0.12.0"},
+      {:ex_cldr, "~> 2.37"},
+      {:ex_cldr_dates_times, "~> 2.16"},
+      # For i18n in the future
+      # {:gettext, "~> 0.24.0"},
+      # Remove me at some point inf favor of finch
+      {:req, "~> 0.4.0"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false}
     ]

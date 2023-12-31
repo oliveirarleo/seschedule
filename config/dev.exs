@@ -1,5 +1,7 @@
 import Config
 
-config :seschedule, webhook_url: "https://bbd3-177-121-209-54.ngrok-free.app/updates_hook"
+config :seschedule,
+  webhook_url: "https://basilisk-right-puma.ngrok-free.app/updates_hook",
+  server_port: 8443
 
 import_config "dev.secret.exs"

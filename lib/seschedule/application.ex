@@ -8,10 +8,11 @@ defmodule Seschedule.Application do
   @impl true
   def start(_type, args) do
     dbg(args)
+
     children =
       case args do
         [env: :test] -> []
-        _ -> [Seschedule.HookHandler]
+        _ -> [Seschedule.HookHandler, {Finch, name: MyFinch}]
       end
 
     # See https://hexdocs.pm/elixir/Supervisor.html

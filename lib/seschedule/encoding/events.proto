@@ -1,0 +1,92 @@
+syntax = "proto3";
+
+
+message SearchRequest {
+  enum Date {
+    NEXT_WEEK = 0;
+    NEXT_MONTH = 1;
+    NEXT_3_MONTHS = 2;
+  }
+
+  enum Place {
+    ALL_PLACES = 0;
+    VINTE_E_QUATRO_DE_MAIO = 2;
+    ARARAQUARA = 25;
+    BAURU = 26;
+    BERTIOGA = 27;
+    BIRIGUI = 28;
+    CAMPINAS = 29;
+    CATANDUVA = 30;
+    JUNDIAI = 31;
+    PIRACICABA = 32;
+    PRESIDENTE_PRUDENTE = 33;
+    REGISTRO = 34;
+    RIBEIRAO_PRETO = 35;
+    RIO_PRETO = 36;
+    SANTOS = 37;
+    SOROCABA = 38;
+    SAO_JOSE_DOS_CAMPOS = 40;
+    TAUBATE = 41;
+    SAO_CARLOS = 42;
+    AVENIDA_PAULISTA = 43;
+    BELENZINHO = 47;
+    BOM_RETIRO = 48;
+    CAMPO_LIMPO = 49;
+    CARMO = 50;
+    CENTRO_DE_PESQUISA_E_FORMACAO = 51;
+    CINESESC = 52;
+    CONSOLACAO = 53;
+    FLORENCIO_DE_ABREU = 54;
+    INTERLAGOS = 55;
+    IPIRANGA = 56;
+    ITAQUERA = 57;
+    OSASCO = 58;
+    PARQUE_DOM_PEDRO_II = 59;
+    PINHEIROS = 60;
+    POMPEIA = 61;
+    SANTANA = 62;
+    SANTO_AMARO = 63;
+    SANTO_ANDRE = 64;
+    SAO_CAETANO = 65;
+    VILA_MARIANA = 66;
+    GUARULHOS = 71;
+    MOGI_DAS_CRUZES = 80;
+    CASA_VERDE = 730;
+    QUATORZE_BIS = 761;
+    PLACE_NOT_SET = 1000;
+  }
+
+  enum Category {
+    ALL_CATEGORIES = 0;
+    ACOES_PARA_CIDADANIA = 1;
+    ALIMENTACAO = 2;
+    ARTES_VISUAIS = 3;
+    CINEMA_E_VIDEO = 4;
+    CIRCO = 5;
+    CRIANCAS = 6;
+    DANCA = 7;
+    EMPRESAS = 8;
+    ESPORTES_E_ATIVIDADE_FISICA = 9;
+    GESTAO_CULTURAL = 10;
+    IDOSOS = 11;
+    INTERGERACOES = 12;
+    JOVENS = 13;
+    LITERATURA = 14;
+    MEIO_AMBIENTE = 15;
+    MULTILINGUAGEM = 16;
+    MUSICA = 17;
+    MUSICA_SHOW = 18;
+    SAUDE = 19;
+    TEATRO = 20;
+    TECNOLOGIAS_E_ARTES = 21;
+    TURISMO = 22;
+    CATEGORY_NOT_SET = 1000;
+  }
+
+  optional int32 page = 1;
+  optional Category category = 2;
+  optional int32 category_page = 3;
+  optional Place place = 4;
+  optional int32 place_page = 5;
+  optional Date date = 6;
+}
