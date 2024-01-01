@@ -11,6 +11,7 @@ defmodule Seschedule.Api.Event do
     unit: [],
     categories: [],
     cancelado: false,
+    esgotado: false,
     num_tickets_web: 0,
     num_tickets_local: 0
   ]

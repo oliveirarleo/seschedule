@@ -149,10 +149,6 @@ defmodule Seschedule.Handlers.Search do
     pagination_end_index = num_take_events * (page - 1) + num_events - 1
     activities = activities |> Enum.slice(pagination_start_index..pagination_end_index)
 
-    dbg(
-      "pagination_start_index: #{pagination_start_index}, pagination_end_index: #{pagination_end_index}, num_events: #{num_events},"
-    )
-
     case activities do
       [] ->
         Telegex.send_message(

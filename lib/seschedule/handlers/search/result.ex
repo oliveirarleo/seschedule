@@ -112,11 +112,7 @@ defmodule Seschedule.Handlers.Search.Result do
 
     """
     *[#{title}](#{activity.link})*
-    #{if "" != String.trim(description) do
-      "#{description}\n"
-    else
-      ""
-    end}#{categories}
+    #{if activity.esgotado, do: "*\\> Esgotado*\n"}#{if activity.cancelado, do: "*\\> Cancelado*\n"}#{description}#{if "" != String.trim(description), do: "\n", else: ""}#{categories}
     Primeira sessão: #{first_session}
     Última sessão: #{last_session}
     Unidade: #{place}

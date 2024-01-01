@@ -41,6 +41,7 @@ defmodule Seschedule.Api.SescSp do
       "link",
       "imagem",
       "cancelado",
+      "esgotado",
       "qtdeIngressosWeb",
       "qtdeIngressosRede"
     ]
@@ -72,6 +73,9 @@ defmodule Seschedule.Api.SescSp do
               &{&1["titulo"] |> String.trim(), "#{sesc_base_url}#{&1["link"] |> String.trim()}"}
             ),
           cancelado: event["cancelado"] == "1",
+          esgotado:
+            event["esgotado"] == "1" ||
+              (event["qtdeIngressosWeb"] == 0 && event["qtdeIngressosRede"] == 0),
           num_tickets_web: event["qtdeIngressosWeb"],
           num_tickets_local: event["qtdeIngressosRede"]
         }

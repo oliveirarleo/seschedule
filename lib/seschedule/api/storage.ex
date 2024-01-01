@@ -9,12 +9,11 @@ defmodule Seschedule.Api.Cache do
   @impl true
   def init(_) do
     Logger.info("Init Cache")
-    state = fetch_events()
 
     # Schedule work to be performed on start
-    schedule_work()
+    schedule_work(:timer.seconds(1))
 
-    {:ok, state}
+    {:ok, %{}}
   end
 
   defp fetch_events() do
@@ -35,8 +34,8 @@ defmodule Seschedule.Api.Cache do
     {:noreply, new_state}
   end
 
-  defp schedule_work do
-    Process.send_after(self(), :work, :timer.minutes(10))
+  defp schedule_work(time \\ :timer.minutes(10)) do
+    Process.send_after(self(), :work, time)
   end
 
   @impl true
