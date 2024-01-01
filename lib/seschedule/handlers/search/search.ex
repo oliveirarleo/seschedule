@@ -103,22 +103,24 @@ defmodule Seschedule.Handlers.Search do
         date: date,
         page: page
       }) do
-    {:ok, _message} =
-      Telegex.edit_message_text(
-        "*Pesquisa*\n" <>
-          Texts.clean_text_for_markdown("""
-          Local: #{Texts.places() |> Keyword.fetch!(place)}
-          Categoria: #{Texts.categories() |> Keyword.fetch!(category)}
-          Quando: #{Texts.dates() |> Keyword.fetch!(date)}
-          Página: #{page}
-          """),
-        chat_id: chat_id,
-        message_id: message_id,
-        parse_mode: "MarkdownV2",
-        reply_markup: %Telegex.Type.InlineKeyboardMarkup{
-          inline_keyboard: []
-        }
-      )
+    case Telegex.edit_message_text(
+           "*Pesquisa*\n" <>
+             Texts.clean_text_for_markdown("""
+             Local: #{Texts.places() |> Keyword.fetch!(place)}
+             Categoria: #{Texts.categories() |> Keyword.fetch!(category)}
+             Quando: #{Texts.dates() |> Keyword.fetch!(date)}
+             Página: #{page}
+             """),
+           chat_id: chat_id,
+           message_id: message_id,
+           parse_mode: "MarkdownV2",
+           reply_markup: %Telegex.Type.InlineKeyboardMarkup{
+             inline_keyboard: []
+           }
+         ) do
+      {:error, error} -> Logger.warning("Unable to edit search message: #{inspect(error)}")
+      _ -> :ok
+    end
 
     typing_action = Task.async(fn -> Telegex.send_chat_action(chat_id, "typing") end)
 

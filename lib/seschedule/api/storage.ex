@@ -36,7 +36,7 @@ defmodule Seschedule.Api.Cache do
   end
 
   defp schedule_work do
-    Process.send_after(self(), :work, :timer.seconds(60))
+    Process.send_after(self(), :work, :timer.minutes(10))
   end
 
   @impl true
