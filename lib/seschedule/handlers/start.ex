@@ -6,7 +6,7 @@ defmodule Seschedule.Handlers.Start do
   """
   @spec start(String.t() | integer()) :: :ok
   def start(chat_id) do
-    Telegex.send_message(
+    {:ok, _message} = Telegex.send_message(
       chat_id,
       """
       *Olá,*

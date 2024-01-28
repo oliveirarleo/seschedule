@@ -8,7 +8,7 @@ defmodule Seschedule.Api.SescSp do
   @doc """
   Make a request to sesc
   """
-  @spec get_events(keyword()) :: {list(), integer()}
+  @spec get_events(keyword()) :: {[Seschedule.Api.Event.t()], integer()}
   def get_events(filter_params \\ []) do
     sesc_api_url = Application.fetch_env!(:seschedule, :sesc_api_url)
 

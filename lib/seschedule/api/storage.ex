@@ -2,11 +2,13 @@ defmodule Seschedule.Api.Cache do
   require Logger
   use GenServer
 
+  @spec start_link(any()) :: :ignore | {:error, any()} | {:ok, pid()}
   def start_link(_) do
     GenServer.start_link(__MODULE__, %{}, name: EventCache)
   end
 
   @impl true
+  @spec init(any()) :: {:ok, %{}}
   def init(_) do
     Logger.info("Init Cache")
 

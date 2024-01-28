@@ -56,8 +56,8 @@ defmodule Seschedule.HookHandler do
 
     commands = @commands_config |> Enum.map(fn {_k, v} -> v.bot_command end)
 
-    Telegex.set_my_commands(commands, language_code: "pt")
-    Telegex.set_my_commands(commands, language_code: "en")
+    {:ok, true} = Telegex.set_my_commands(commands, language_code: "pt")
+    {:ok, true} = Telegex.set_my_commands(commands, language_code: "en")
 
     %Telegex.Hook.Config{server_port: server_port}
   end
@@ -67,7 +67,7 @@ defmodule Seschedule.HookHandler do
   """
   @impl true
   @spec on_update(Telegex.Type.Update.t()) :: :ok
-  def on_update(update) do
+  def on_update(%Telegex.Type.Update{} = update) do
     case update do
       %Telegex.Type.Update{
         message: %Telegex.Type.Message{
@@ -110,5 +110,7 @@ defmodule Seschedule.HookHandler do
       update ->
         Logger.warning("Fallback on update: #{inspect(update)}")
     end
+
+    :ok
   end
 end

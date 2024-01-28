@@ -100,6 +100,15 @@ defmodule Seschedule.Handlers.Search.Texts do
 
   @doc """
   Telegram's MarkdownV2 needs these characters with prefix "//"
+
+  ## Examples
+
+    iex> Seschedule.Handlers.Search.Texts.clean_text_for_markdown("Seu madruguinha é um cachorro muito amado, sempre alerta.")
+    "Seu madruguinha é um cachorro muito amado, sempre alerta\\\\."
+
+    iex> Seschedule.Handlers.Search.Texts.clean_text_for_markdown("2024-01-27T20:00")
+    "2024\\\\-01\\\\-27T20:00"
+
   """
   def clean_text_for_markdown(text) do
     String.replace(

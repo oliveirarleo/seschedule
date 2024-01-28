@@ -10,7 +10,6 @@ defmodule Seschedule.Handlers.NextEvents do
     Logger.debug("In next_events #{chat_id}")
 
     num_events = Application.fetch_env!(:seschedule, :events_per_page)
-
     activities =
       Seschedule.Api.Cache.get_events()
       |> Enum.take(num_events)

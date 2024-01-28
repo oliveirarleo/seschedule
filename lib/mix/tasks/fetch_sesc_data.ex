@@ -3,6 +3,7 @@ defmodule Mix.Tasks.FetchSescData do
 
   @shortdoc "Fetch SESC API and save the files as references"
   @impl Mix.Task
+  @spec run(any()) :: :ok
   def run(_) do
     {:ok, _} = Application.ensure_all_started(:req)
 
@@ -22,16 +23,18 @@ defmodule Mix.Tasks.FetchSescData do
         ]
       )
 
-    File.write(
-      "/home/leo/git/p/seschedule/seschedule/references/api_response_body.json",
-      Jason.encode!(response.body, pretty: true)
-    )
+    :ok =
+      File.write(
+        "/home/leo/git/p/seschedule/seschedule/references/api_response_body.json",
+        Jason.encode!(response.body, pretty: true)
+      )
 
     smap = Map.from_struct(response)
 
-    File.write(
-      "/home/leo/git/p/seschedule/seschedule/references/api_response.json",
-      Jason.encode!(smap, pretty: true)
-    )
+    :ok =
+      File.write(
+        "/home/leo/git/p/seschedule/seschedule/references/api_response.json",
+        Jason.encode!(smap, pretty: true)
+      )
   end
 end

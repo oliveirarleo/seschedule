@@ -94,7 +94,6 @@ defmodule Seschedule.Handlers.Search do
     :ok
   end
 
-  # TODO: break this into many functions
   def handle_search_request(chat_id, message_id, %SearchRequest{
         place: place,
         place_page: place_page,
@@ -124,10 +123,10 @@ defmodule Seschedule.Handlers.Search do
 
     typing_action = Task.async(fn -> Telegex.send_chat_action(chat_id, "typing") end)
 
-    num_take_events = Application.fetch_env!(:seschedule, :events_per_page)
-
-    events = Seschedule.Api.Cache.get_events() |> Enum.map(fn {_, v} -> v end)
-    events = events |> Enum.sort_by(fn v -> v.first_session end)
+    events =
+      Seschedule.Api.Cache.get_events()
+      |> Enum.map(fn {_, v} -> v end)
+      |> Enum.sort_by(fn v -> v.first_session end)
 
     places =
       case place do
@@ -135,70 +134,63 @@ defmodule Seschedule.Handlers.Search do
         place -> [place]
       end
 
-    activities = Result.filter_events(events, places, category, date)
-    total_events = length(activities)
+    {activities, has_next_page, has_only_one_page, total_events, pagination_start, pagination_end} =
+      Result.filter_events(events, places, category, date) |> Result.paginate_activities(page)
 
-    num_events =
-      if page <= div(total_events, num_take_events) do
-        num_take_events
-      else
-        rem(total_events, num_take_events)
-      end
+    _ =
+      case activities do
+        [] ->
+          {:ok, _message} =
+            Telegex.send_message(
+              chat_id,
+              Texts.clean_text_for_markdown("Não encontrei nenhum evento para essa pesquisa."),
+              parse_mode: "MarkdownV2"
+            )
 
-    pagination_start_index = num_take_events * (page - 1)
-    pagination_end_index = num_take_events * (page - 1) + num_events - 1
-    activities = activities |> Enum.slice(pagination_start_index..pagination_end_index)
+        events ->
+          {:ok, _message} =
+            Telegex.send_message(
+              chat_id,
+              Texts.clean_text_for_markdown("""
+              Número de eventos encontrados #{total_events}#{if has_only_one_page do
+                ".\nAqui estão os eventos #{pagination_start} ... #{pagination_end}"
+              end}:
+              """),
+              parse_mode: "MarkdownV2"
+            )
 
-    case activities do
-      [] ->
-        Telegex.send_message(
-          chat_id,
-          Texts.clean_text_for_markdown("Não encontrei nenhum evento para essa pesquisa."),
-          parse_mode: "MarkdownV2"
-        )
+          :ok = Result.send_activities_messages(chat_id, events)
 
-      events ->
-        Telegex.send_message(
-          chat_id,
-          Texts.clean_text_for_markdown("""
-          Número de eventos encontrados #{total_events}#{if total_events > num_take_events do
-            ".\nAqui estão os eventos #{pagination_start_index + 1} ... #{pagination_end_index + 1}"
-          end}:
-          """),
-          parse_mode: "MarkdownV2"
-        )
-
-        Result.send_activities_messages(chat_id, events)
-
-        # Next page, if there are more events to show
-        if total_events / page > num_take_events do
-          Telegex.send_message(
-            chat_id,
-            "Para mais eventos, clique no botão abaixo:",
-            parse_mode: "MarkdownV2",
-            reply_markup: %Telegex.Type.InlineKeyboardMarkup{
-              inline_keyboard: [
-                [
-                  %Telegex.Type.InlineKeyboardButton{
-                    text: "Página #{page + 1}",
-                    callback_data:
-                      %SearchRequest{
-                        page: page + 1,
-                        place_page: place_page,
-                        category: category,
-                        category_page: category_page,
-                        place: place,
-                        date: date
+          # Next page, if there are more events to show
+          _message =
+            if has_next_page do
+              Telegex.send_message(
+                chat_id,
+                "Para mais eventos, clique no botão abaixo:",
+                parse_mode: "MarkdownV2",
+                reply_markup: %Telegex.Type.InlineKeyboardMarkup{
+                  inline_keyboard: [
+                    [
+                      %Telegex.Type.InlineKeyboardButton{
+                        text: "Página #{page + 1}",
+                        callback_data:
+                          %SearchRequest{
+                            page: page + 1,
+                            place_page: place_page,
+                            category: category,
+                            category_page: category_page,
+                            place: place,
+                            date: date
+                          }
+                          |> SearchRequest.encode()
+                          |> Base.encode64()
                       }
-                      |> SearchRequest.encode()
-                      |> Base.encode64()
-                  }
-                ]
-              ]
-            }
-          )
-        end
-    end
+                    ]
+                  ]
+                }
+              )
+            end
+      end
 
     Task.await(typing_action)
   end

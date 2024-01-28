@@ -126,37 +126,68 @@ defmodule Seschedule.Handlers.Search.Result do
 
       image_link = activity.image_link
 
-      case Telegex.send_photo(
-             chat_id,
-             image_link,
-             caption: text,
-             parse_mode: "MarkdownV2"
-           ) do
-        # TODO: it does not support all pics:
-        # * The photo must be at most 10 MB in size.
-        # * The photo's width and height must not exceed 10000 in total.
-        # * Width and height ratio must be at most 20.
-        # That means we need to fetch the img and send as multipart.
-        # For now we check if it fails, if it does, send a normal message without image
-        {:error, error} ->
-          Logger.info("""
-          Error sending photo:
-          link: #{image_link}
-          #{text}
-          #{inspect(error)}
-          """)
+      :ok =
+        case Telegex.send_photo(
+               chat_id,
+               image_link,
+               caption: text,
+               parse_mode: "MarkdownV2"
+             ) do
+          {:error, error} ->
+            # TODO: it does not support all pics:
+            # * The photo must be at most 10 MB in size.
+            # * The photo's width and height must not exceed 10000 in total.
+            # * Width and height ratio must be at most 20.
+            # That means we need to fetch the img and send as multipart.
+            # For now we check if it fails, if it does, send a normal message without image
 
-          Telegex.send_message(
-            chat_id,
-            text,
-            parse_mode: "MarkdownV2"
-          )
+            Logger.info("""
+            Error sending photo:
+            link: #{image_link}
+            #{text}
+            #{inspect(error)}
+            """)
 
-        ok ->
-          ok
-      end
+            {:ok, _message} =
+              Telegex.send_message(
+                chat_id,
+                text,
+                parse_mode: "MarkdownV2"
+              )
+
+            :ok
+
+          _ ->
+            :ok
+        end
     end
 
     :ok
+  end
+
+  @doc """
+  Paginte any list based on :events_per_page config. Should work as in a loop
+  returns {paginated_list, has_next_page, has_only_one_page, total_events, start, end}
+  """
+  @spec paginate_activities(list(), integer()) ::
+          {list(), boolean(), boolean(), non_neg_integer(), integer(), integer()}
+  def paginate_activities(list, page) do
+    total_events = length(list)
+
+    num_take_events = Application.fetch_env!(:seschedule, :events_per_page)
+
+    num_events =
+      if page <= div(total_events, num_take_events) do
+        num_take_events
+      else
+        rem(total_events, num_take_events)
+      end
+
+    pagination_start_index = num_take_events * (page - 1)
+    pagination_end_index = num_take_events * (page - 1) + num_events - 1
+
+    {Enum.slice(list, pagination_start_index..pagination_end_index),
+     total_events / page > num_take_events, total_events > num_take_events, total_events,
+     pagination_start_index + 1, pagination_end_index + 1}
   end
 end
