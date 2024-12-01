@@ -30,10 +30,6 @@ defmodule Seschedule.Handlers.Search do
       |> Base.decode64!()
       |> SearchRequest.decode()
 
-    Logger.info(
-      "Received callback with #{inspect(chat_id)} and #{inspect(callback_data)}, decoded: #{inspect(decoded)}"
-    )
-
     answer = Task.async(fn -> {:ok, true} = Telegex.answer_callback_query(callback_id) end)
 
     handle_search_request(chat_id, message_id, decoded)
@@ -60,8 +56,6 @@ defmodule Seschedule.Handlers.Search do
         date: date,
         page: page
       }) do
-    Logger.info("In place: #{chat_id}")
-
     {:ok, _message} =
       Telegex.edit_message_text(
         "Selecione a unidade do SESC que gostaria de buscar:",
@@ -81,8 +75,6 @@ defmodule Seschedule.Handlers.Search do
         date: date,
         page: page
       }) do
-    Logger.info("In category: #{chat_id}")
-
     {:ok, _message} =
       Telegex.edit_message_text(
         "Selecione a categoria que gostaria de buscar:",

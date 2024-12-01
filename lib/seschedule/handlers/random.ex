@@ -22,8 +22,6 @@ defmodule Seschedule.Handlers.Random do
   """
   @spec random_events(String.t() | integer()) :: :ok
   def random_events(chat_id) do
-    Logger.info("In random: #{chat_id}")
-
     {activities, num_events} = get_random_activities()
 
     {:ok, _message} =

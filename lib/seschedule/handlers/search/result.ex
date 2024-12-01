@@ -141,7 +141,7 @@ defmodule Seschedule.Handlers.Search.Result do
             # That means we need to fetch the img and send as multipart.
             # For now we check if it fails, if it does, send a normal message without image
 
-            Logger.info("""
+            Logger.warning("""
             Error sending photo:
             link: #{image_link}
             #{text}

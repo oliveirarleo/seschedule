@@ -7,9 +7,8 @@ defmodule Seschedule.Handlers.NextEvents do
   This is the handler for the next_events command. It should send a telegram message with some of the next events.
   """
   def next_events(chat_id) do
-    Logger.debug("In next_events #{chat_id}")
-
     num_events = Application.fetch_env!(:seschedule, :events_per_page)
+
     activities =
       Seschedule.Api.Cache.get_events()
       |> Enum.take(num_events)

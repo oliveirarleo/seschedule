@@ -52,7 +52,7 @@ defmodule Seschedule.HookHandler do
     {:ok, true} = Telegex.delete_webhook()
     {:ok, true} = Telegex.set_webhook(webhook_url)
 
-    Logger.info("Domains et to #{webhook_url} on port #{server_port}")
+    Logger.info("Domains set to #{webhook_url} on port #{server_port}")
 
     commands = @commands_config |> Enum.map(fn {_k, v} -> v.bot_command end)
 
