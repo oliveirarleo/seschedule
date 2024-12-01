@@ -34,9 +34,9 @@ defmodule Seschedule.Encoding.Events.SearchRequest.Date do
     }
   end
 
-  field :NEXT_WEEK, 0
-  field :NEXT_MONTH, 1
-  field :NEXT_3_MONTHS, 2
+  field(:NEXT_WEEK, 0)
+  field(:NEXT_MONTH, 1)
+  field(:NEXT_3_MONTHS, 2)
 end
 
 defmodule Seschedule.Encoding.Events.SearchRequest.Place do
@@ -333,52 +333,52 @@ defmodule Seschedule.Encoding.Events.SearchRequest.Place do
     }
   end
 
-  field :ALL_PLACES, 0
-  field :GRANDE_SP, 1
-  field :_24_DE_MAIO, 2
-  field :ARARAQUARA, 25
-  field :BAURU, 26
-  field :BERTIOGA, 27
-  field :BIRIGUI, 28
-  field :CAMPINAS, 29
-  field :CATANDUVA, 30
-  field :JUNDIAI, 31
-  field :PIRACICABA, 32
-  field :PRESIDENTE_PRUDENTE, 33
-  field :REGISTRO, 34
-  field :RIBEIRAO_PRETO, 35
-  field :RIO_PRETO, 36
-  field :SANTOS, 37
-  field :SOROCABA, 38
-  field :SAO_JOSE_DOS_CAMPOS, 40
-  field :TAUBATE, 41
-  field :SAO_CARLOS, 42
-  field :AVENIDA_PAULISTA, 43
-  field :BELENZINHO, 47
-  field :BOM_RETIRO, 48
-  field :CAMPO_LIMPO, 49
-  field :CARMO, 50
-  field :CENTRO_DE_PESQUISA_E_FORMACAO, 51
-  field :CINESESC, 52
-  field :CONSOLACAO, 53
-  field :FLORENCIO_DE_ABREU, 54
-  field :INTERLAGOS, 55
-  field :IPIRANGA, 56
-  field :ITAQUERA, 57
-  field :OSASCO, 58
-  field :PARQUE_DOM_PEDRO_II, 59
-  field :PINHEIROS, 60
-  field :POMPEIA, 61
-  field :SANTANA, 62
-  field :SANTO_AMARO, 63
-  field :SANTO_ANDRE, 64
-  field :SAO_CAETANO, 65
-  field :VILA_MARIANA, 66
-  field :GUARULHOS, 71
-  field :MOGI_DAS_CRUZES, 80
-  field :CASA_VERDE, 730
-  field :_14_BIS, 761
-  field :PLACE_NOT_SET, 1000
+  field(:ALL_PLACES, 0)
+  field(:GRANDE_SP, 1)
+  field(:_24_DE_MAIO, 2)
+  field(:ARARAQUARA, 25)
+  field(:BAURU, 26)
+  field(:BERTIOGA, 27)
+  field(:BIRIGUI, 28)
+  field(:CAMPINAS, 29)
+  field(:CATANDUVA, 30)
+  field(:JUNDIAI, 31)
+  field(:PIRACICABA, 32)
+  field(:PRESIDENTE_PRUDENTE, 33)
+  field(:REGISTRO, 34)
+  field(:RIBEIRAO_PRETO, 35)
+  field(:RIO_PRETO, 36)
+  field(:SANTOS, 37)
+  field(:SOROCABA, 38)
+  field(:SAO_JOSE_DOS_CAMPOS, 40)
+  field(:TAUBATE, 41)
+  field(:SAO_CARLOS, 42)
+  field(:AVENIDA_PAULISTA, 43)
+  field(:BELENZINHO, 47)
+  field(:BOM_RETIRO, 48)
+  field(:CAMPO_LIMPO, 49)
+  field(:CARMO, 50)
+  field(:CENTRO_DE_PESQUISA_E_FORMACAO, 51)
+  field(:CINESESC, 52)
+  field(:CONSOLACAO, 53)
+  field(:FLORENCIO_DE_ABREU, 54)
+  field(:INTERLAGOS, 55)
+  field(:IPIRANGA, 56)
+  field(:ITAQUERA, 57)
+  field(:OSASCO, 58)
+  field(:PARQUE_DOM_PEDRO_II, 59)
+  field(:PINHEIROS, 60)
+  field(:POMPEIA, 61)
+  field(:SANTANA, 62)
+  field(:SANTO_AMARO, 63)
+  field(:SANTO_ANDRE, 64)
+  field(:SAO_CAETANO, 65)
+  field(:VILA_MARIANA, 66)
+  field(:GUARULHOS, 71)
+  field(:MOGI_DAS_CRUZES, 80)
+  field(:CASA_VERDE, 730)
+  field(:_14_BIS, 761)
+  field(:PLACE_NOT_SET, 1000)
 end
 
 defmodule Seschedule.Encoding.Events.SearchRequest.Category do
@@ -543,30 +543,30 @@ defmodule Seschedule.Encoding.Events.SearchRequest.Category do
     }
   end
 
-  field :ALL_CATEGORIES, 0
-  field :ACOES_PARA_CIDADANIA, 1
-  field :ALIMENTACAO, 2
-  field :ARTES_VISUAIS, 3
-  field :CINEMA_E_VIDEO, 4
-  field :CIRCO, 5
-  field :CRIANCAS, 6
-  field :DANCA, 7
-  field :EMPRESAS, 8
-  field :ESPORTES_E_ATIVIDADE_FISICA, 9
-  field :GESTAO_CULTURAL, 10
-  field :IDOSOS, 11
-  field :INTERGERACOES, 12
-  field :JOVENS, 13
-  field :LITERATURA, 14
-  field :MEIO_AMBIENTE, 15
-  field :MULTILINGUAGEM, 16
-  field :MUSICA, 17
-  field :MUSICA_SHOW, 18
-  field :SAUDE, 19
-  field :TEATRO, 20
-  field :TECNOLOGIAS_E_ARTES, 21
-  field :TURISMO, 22
-  field :CATEGORY_NOT_SET, 1000
+  field(:ALL_CATEGORIES, 0)
+  field(:ACOES_PARA_CIDADANIA, 1)
+  field(:ALIMENTACAO, 2)
+  field(:ARTES_VISUAIS, 3)
+  field(:CINEMA_E_VIDEO, 4)
+  field(:CIRCO, 5)
+  field(:CRIANCAS, 6)
+  field(:DANCA, 7)
+  field(:EMPRESAS, 8)
+  field(:ESPORTES_E_ATIVIDADE_FISICA, 9)
+  field(:GESTAO_CULTURAL, 10)
+  field(:IDOSOS, 11)
+  field(:INTERGERACOES, 12)
+  field(:JOVENS, 13)
+  field(:LITERATURA, 14)
+  field(:MEIO_AMBIENTE, 15)
+  field(:MULTILINGUAGEM, 16)
+  field(:MUSICA, 17)
+  field(:MUSICA_SHOW, 18)
+  field(:SAUDE, 19)
+  field(:TEATRO, 20)
+  field(:TECNOLOGIAS_E_ARTES, 21)
+  field(:TURISMO, 22)
+  field(:CATEGORY_NOT_SET, 1000)
 end
 
 defmodule Seschedule.Encoding.Events.SearchRequest do
@@ -1169,24 +1169,27 @@ defmodule Seschedule.Encoding.Events.SearchRequest do
     }
   end
 
-  field :page, 1, proto3_optional: true, type: :int32
+  field(:page, 1, proto3_optional: true, type: :int32)
 
-  field :category, 2,
+  field(:category, 2,
     proto3_optional: true,
     type: Seschedule.Encoding.Events.SearchRequest.Category,
     enum: true
+  )
 
-  field :category_page, 3, proto3_optional: true, type: :int32, json_name: "categoryPage"
+  field(:category_page, 3, proto3_optional: true, type: :int32, json_name: "categoryPage")
 
-  field :place, 4,
+  field(:place, 4,
     proto3_optional: true,
     type: Seschedule.Encoding.Events.SearchRequest.Place,
     enum: true
+  )
 
-  field :place_page, 5, proto3_optional: true, type: :int32, json_name: "placePage"
+  field(:place_page, 5, proto3_optional: true, type: :int32, json_name: "placePage")
 
-  field :date, 6,
+  field(:date, 6,
     proto3_optional: true,
     type: Seschedule.Encoding.Events.SearchRequest.Date,
     enum: true
+  )
 end

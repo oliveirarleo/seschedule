@@ -24,10 +24,11 @@ defmodule Mix.Tasks.GetInfo do
         category
       end)
 
-    :ok = File.write(
-      "/home/leo/git/p/seschedule/seschedule/references/categories.json",
-      Jason.encode!(categories, pretty: true)
-    )
+    :ok =
+      File.write(
+        "/home/leo/git/p/seschedule/seschedule/references/categories.json",
+        Jason.encode!(categories, pretty: true)
+      )
 
     grouped_places =
       activities
@@ -43,9 +44,10 @@ defmodule Mix.Tasks.GetInfo do
     places =
       Map.keys(grouped_places)
 
-    :ok = File.write(
-      "/home/leo/git/p/seschedule/seschedule/references/places.json",
-      Jason.encode!(places, pretty: true)
-    )
+    :ok =
+      File.write(
+        "/home/leo/git/p/seschedule/seschedule/references/places.json",
+        Jason.encode!(places, pretty: true)
+      )
   end
 end

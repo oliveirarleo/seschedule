@@ -32,7 +32,6 @@ defmodule Seschedule.Handlers.Search.TextsTest do
     assert from_text == from_encoding
   end
 
-
   test "place options match encoding" do
     from_text =
       Seschedule.Handlers.Search.Texts.places()
