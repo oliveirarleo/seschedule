@@ -28,3 +28,7 @@ seschedule-*.tar
 .env
 
 .elixir_ls/
+
+.nix-mix/
+
+.erlang-history/

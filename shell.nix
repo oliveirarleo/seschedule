@@ -5,8 +5,8 @@ with pkgs;
 
 let
   inherit (lib) optional optionals;
-  erlang = beam.interpreters.erlangR26_odbc_javac;
-  elixir = beam.packages.erlangR26.elixir_1_15;
+  erlang = pkgs.beam.interpreters.erlangR27_odbc_javac;
+  elixir = pkgs.beam.packages.erlangR27.elixir_1_17;
 in
 
 mkShell {

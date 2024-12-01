@@ -4,7 +4,7 @@ A bot for telegram that searches [SESC](https://www.sescsp.org.br/) events and r
 
 ## Using in dev environment
 
-  * Run `mix setup` to install and setup dependencies
+  * Run `mix deps.get && mix setup` to install and setup dependencies
   * Install ngrok and run `ngrok http 8443`
   * Update `dev.exs` and `dev.secret.exs` with your new url and token, example:
 
