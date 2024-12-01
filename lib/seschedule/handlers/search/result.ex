@@ -184,7 +184,7 @@ defmodule Seschedule.Handlers.Search.Result do
       end
 
     pagination_start_index = num_take_events * (page - 1)
-    pagination_end_index = num_take_events * (page - 1) + num_events - 1
+    pagination_end_index = num_take_events * (page - 1) + num_events
 
     {Enum.slice(list, pagination_start_index..pagination_end_index),
      total_events / page > num_take_events, total_events > num_take_events, total_events,
