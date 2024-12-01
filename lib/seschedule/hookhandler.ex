@@ -92,9 +92,9 @@ defmodule Seschedule.HookHandler do
         callback_query: %Telegex.Type.CallbackQuery{
           id: callback_id,
           data: callback_data,
-          message: %Telegex.Type.Message{
+          message: %{
             message_id: message_id,
-            chat: %Telegex.Type.Chat{
+            chat: %{
               id: chat_id
             }
           }

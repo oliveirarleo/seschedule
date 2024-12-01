@@ -26,19 +26,17 @@ defmodule Seschedule.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:telegex, "~> 1.3.2"},
-      {:finch, "~> 0.16.0"},
+      {:telegex, "~> 1.8"},
+      {:finch, "~> 0.19.0"},
       {:multipart, "~> 0.4.0"},
-      {:plug, "~> 1.15"},
-      {:remote_ip, "~> 1.1"},
-      {:bandit, "~> 1.1"},
-      {:protobuf, "~> 0.12.0"},
-      {:ex_cldr, "~> 2.37"},
-      {:ex_cldr_dates_times, "~> 2.16"},
-      # For i18n in the future
-      # {:gettext, "~> 0.24.0"},
+      {:plug, "~> 1.16"},
+      {:remote_ip, "~> 1.2"},
+      {:bandit, "~> 1.6"},
+      {:protobuf, "~> 0.13"},
+      {:ex_cldr, "~> 2.40"},
+      {:ex_cldr_dates_times, "~> 2.20"},
       # Remove me at some point inf favor of finch
-      {:req, "~> 0.4.0"},
+      {:req, "~> 0.5"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false}
     ]
